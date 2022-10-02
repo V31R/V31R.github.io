@@ -41,7 +41,7 @@ nav .nav-link {
 
 
 footer {
-    background-color:rgb(222, 209, 236)
+    background-color:rgb(222, 209, 236);
 }
 
 footer .container {
@@ -55,4 +55,30 @@ footer .container {
 footer .link {
     color: rgb(0, 0, 0);
     text-decoration: none;
+}
+
+main {
+    padding-top: 15px;
+}
+
+.products-list .product {
+    position: relative;
+    border: 1px solid rgb(222, 209, 236);;
+    padding: 15px;
+}
+
+.products-list .product img {
+    width: 100%;
+}
+
+.btn-try {
+    width: 100%;
+    background-color: rgb(143, 57, 235);
+    color: #fff;
+    border-radius: 4px;
+}
+
+.btn.btn-try:hover {
+    background-color: rgb(80, 23, 139);
+    color: rgb(255, 255, 255);
 }
