@@ -1,0 +1,37 @@
+header {
+    background-color: rgb(143, 57, 235);
+}
+
+header .container {
+    height: 100%;
+    align-items: center;
+}
+
+header .navbar-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header .logo img {
+    width: 150px;
+}
+
+
+header nav ul{
+    display: flex;
+    list-style: none;
+    color: #fff;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li {
+    padding: 15px 15px;
+}
+
+nav .nav-link {
+    color: #fff;
+}
