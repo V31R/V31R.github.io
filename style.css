@@ -42,6 +42,7 @@ nav .nav-link {
 
 footer {
     background-color:rgb(222, 209, 236);
+    height: 75px;
 }
 
 footer .container {
@@ -65,17 +66,22 @@ main {
     position: relative;
     border: 1px solid rgb(222, 209, 236);;
     padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .products-list .product img {
     width: 100%;
 }
 
+
 .btn-try {
     width: 100%;
     background-color: rgb(143, 57, 235);
     color: #fff;
     border-radius: 4px;
+    margin-bottom: auto;
 }
 
 .btn.btn-try:hover {
