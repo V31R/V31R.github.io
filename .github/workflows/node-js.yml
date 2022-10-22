@@ -10,7 +10,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./cloud-ml
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
@@ -18,17 +20,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - working-directory: ./cloud-ml
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Install dependencies
-      run: sh install.sh
+      run: npm install
 
     - name: Run the tests
-      run: sh test.sh
+      run: npm test
 
     - name: Build
-      run: sh build.sh
+      run: npm run build
