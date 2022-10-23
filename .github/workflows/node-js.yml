@@ -40,13 +40,15 @@ jobs:
       env:
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'
+        name: V31R
         token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
         repository: ${{ github.repository }}
       run: |
         npm run deploy
         cd ../
-        git config --global user.name user_name
-        git config --global user.email user_email
+        git config user.name user_name
+        git config user.email user_email
+        git remote set-url origin https://${name}:${token}@github.com/${name}/${repository}
         git --work-tree build add --all
         git commit -m "Automatic Deploy action run by github-actions"
         git push origin HEAD:gh-pages --force
