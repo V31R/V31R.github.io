@@ -3,7 +3,6 @@ import "./css/header.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './images/brain.png';
 import {main_page_link, site_name} from './globals';
-import { Link } from "react-router-dom";
 
 class Header extends React.Component{
     render(){
