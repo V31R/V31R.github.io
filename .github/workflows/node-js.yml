@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ["*"]
-  pull_request:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "*" ]
 
 jobs:
   build:
@@ -38,6 +38,7 @@ jobs:
       
     - name: Deploy
       run: |
+        cd ../
         git config --global user.name $user_name
         git config --global user.email $user_email
         git remote set-url origin https://${github_token}@github.com/${repository}
