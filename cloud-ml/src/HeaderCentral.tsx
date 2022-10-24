@@ -3,28 +3,28 @@ import "./css/header_central.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './images/brain.png';
 import {main_page_link, site_name} from './globals';
+import { Link } from "react-router-dom";
 
-class HeaderCentral extends React.Component{
-    render(){
-        return(
-            <header>
-                <nav>
-                    <div className="navbar">
-                        <div className="container">
-                            <div className="navbar-brand">
-                                <a  href={main_page_link()}>
-                                    <div className="logo">
-                                        <img src={logo} alt="logo"/>
-                                    </div>
-                                </a>
-                                <a className="nav-link" href={main_page_link()}> {site_name()} </a>
-                            </div>
+function HeaderCentral(){
+    return (
+        <header>
+            <nav>
+                <div className="navbar">
+                    <div className="container">
+                        <div className="navbar-brand">
+                            <Link to={main_page_link()}>
+                                <div className="logo">
+                                    <img src={logo} alt="logo" />
+                                </div>
+                            </Link>
+                            <Link className="nav-link" to={main_page_link()}> {site_name()} </Link>
                         </div>
                     </div>
-                </nav>
-            </header>
-        );
-    }
+                </div>
+            </nav>
+        </header>
+    );
 }
+
 
 export default HeaderCentral;

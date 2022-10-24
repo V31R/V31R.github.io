@@ -1,28 +1,3 @@
-header {
-    background-color: rgb(143, 57, 235);
-}
-
-header .container {
-    height: 100%;
-    align-items: center;
-}
-
-header .navbar-brand {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-header .logo img {
-    width: 150px;
-}
-
-nav .nav-link {
-    color: #fff;
-}
-
 main {
     padding-top: 15px;
 }
@@ -35,7 +10,8 @@ main .title{
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    border: 1px solid rgb(222, 209, 236);
+    border: 3px solid rgb(222, 209, 236);
+    border-radius: 10px;
     padding: 15px;
     height: 100%;
     display: flex;

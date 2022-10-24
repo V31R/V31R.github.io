@@ -2,32 +2,42 @@ import React from "react";
 import "./css/header.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './images/brain.png';
-import {main_page_link, site_name} from './globals';
+import { main_page_link, site_name} from './globals';
+import { Link } from "react-router-dom";
+import authContext from "./authContext";
 
-class Header extends React.Component{
-    render(){
-        return(
-            <header>
-                <nav>
-                    <div className="navbar">
-                        <div className="container">
-                            <div className="navbar-brand">
-                            <a  href={main_page_link()}>
-                                    <div className="logo">
-                                        <img src={logo} alt="logo"/>
-                                    </div>
-                                </a>
-                                <a className="nav-link" href={main_page_link()}> {site_name()} </a>
-                            </div>
-                            <div className="navbar-brand">
-                                <a className="nav-link" href="/login">Профиль</a>
-                            </div>
+function Header (){
+    const isLogin = React.useContext(authContext);
+    // eslint-disable-next-line
+    
+    console.log(isLogin)
+    let link: string = '/login';
+    if (isLogin) {
+        link = '/profile';
+    }
+    console.log(link);
+    return (
+        <header>
+            <nav>
+                <div className="navbar">
+                    <div className="container">
+                        <div className="navbar-brand">
+                            <Link to={main_page_link()}>
+                                <div className="logo">
+                                    <img src={logo} alt="logo" />
+                                </div>
+                            </Link>
+                            <Link className="nav-link" to={main_page_link()}> {site_name()} </Link>
+                        </div>
+                        <div className="navbar-brand">
+                            <Link className="nav-link" to={link}> Профиль </Link>
                         </div>
                     </div>
-                </nav>
-            </header>
-        );
-    }
+                </div>
+            </nav>
+        </header>
+    );
 }
+
 
 export default Header;
