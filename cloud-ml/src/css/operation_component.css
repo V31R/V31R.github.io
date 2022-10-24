@@ -1,0 +1,27 @@
+ .product {
+    position: relative;
+    border: 2px solid rgb(222, 209, 236);
+    border-radius: 6px;
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product img {
+    width: 100%;
+}
+
+
+.btn-try {
+    width: 100%;
+    background-color: rgb(143, 57, 235);
+    color: #fff;
+    border-radius: 4px;
+    margin-bottom: auto;
+}
+
+.btn.btn-try:hover {
+    background-color: rgb(80, 23, 139);
+    color: rgb(255, 255, 255);
+}
