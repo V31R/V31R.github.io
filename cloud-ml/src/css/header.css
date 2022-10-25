@@ -15,10 +15,6 @@ header .navbar-brand {
     align-items: center;
 }
 
-header .logo img {
-    width: 120px;
-}
-
 header nav {
     margin-left: auto;
 }

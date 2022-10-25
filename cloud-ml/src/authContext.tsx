@@ -1,8 +1,10 @@
 import { createContext } from "react";
 
-const authContext = createContext({
-  authenticated: false,
-  setAuthenticated: (auth: any) => {}
-});
+export interface AuthContext{
+  authenticated: boolean,
+  setAuthenticated (auth: boolean): void
+}
+
+const authContext = createContext<AuthContext| null>(null);
 
 export default authContext;

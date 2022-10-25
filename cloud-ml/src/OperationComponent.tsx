@@ -6,9 +6,6 @@ import './css/operation_component.css';
 class OperationComponent extends React.Component<Operation>{
 
     render(){
-        console.log(process.env.PATH);
-        console.log(require.main)
-        console.log("./images/"+this.props.img_name);
         return(
             <div className="col-md-6 col-lg-4 mb-3">
                 <div className="product">

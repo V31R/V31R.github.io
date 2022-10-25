@@ -12,7 +12,7 @@ function Header (){
     
     console.log(isLogin)
     let link: string = '/login';
-    if (isLogin) {
+    if (isLogin!.authenticated) {
         link = '/profile';
     }
     console.log(link);
@@ -24,7 +24,7 @@ function Header (){
                         <div className="navbar-brand">
                             <Link to={main_page_link()}>
                                 <div className="logo">
-                                    <img src={logo} alt="logo" />
+                                    <img src={logo} width = {120} alt="logo" />
                                 </div>
                             </Link>
                             <Link className="nav-link" to={main_page_link()}> {site_name()} </Link>

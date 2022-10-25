@@ -8,18 +8,20 @@ import Profile from './profile';
 import Footer from './Footer';
 
 function App() {
-  const [authenticated, setAuthenticated] = React.useState(false);
+
+  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
 
   return (
-    <AuthContext.Provider value={{ authenticated, setAuthenticated }}>
-      <Routes>
-        <Route path="/" element={ <Home /> } />
-        <Route path="/profile" element={ <Profile /> } />
-        <Route path="/login" element={ <Login /> } />
-      </Routes>
-      <Footer />
-    </AuthContext.Provider>
-  )
+      <AuthContext.Provider value={{ authenticated, setAuthenticated }}>
+        
+        <Routes>
+          <Route path="/" element={ <Home /> } />
+          <Route path="/profile" element={ <Profile /> } />
+          <Route path="/login" element={ <Login /> } />
+        </Routes>
+        <Footer />
+      </AuthContext.Provider>
+    )
 }
 
 export default App;

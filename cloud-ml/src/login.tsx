@@ -2,24 +2,25 @@ import React from "react";
 import './css/login.css';
 import HeaderCentral from "./HeaderCentral";
 import { useNavigate, NavigateFunction } from "react-router-dom";
-import AuthContext from './authContext'
-
-function HandleMouseEvent(navigate:NavigateFunction, email:string, password: string, setLogin: any){
-    if(email !== '' && password !== ''){
-        navigate('/profile')
-        setLogin(true);
-    }
-};
-
+import authContext from "./authContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
     const navigate:NavigateFunction = useNavigate();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [authenticated, setAuthenticated] = React.useState(false);
+    const auth_context = React.useContext(authContext);
+
+    function HandleMouseEvent(){
+        if(email !== '' && password !== ''){
+            navigate('/profile')
+            auth_context!.setAuthenticated(true);
+            console.log( auth_context!.authenticated);
+        }
+    };
+
     return (
         <React.Fragment>
-            <AuthContext.Provider value={{ authenticated, setAuthenticated }}>
             <HeaderCentral />
             <main className="container">
                 <section className="login-form mb-3">
@@ -38,12 +39,11 @@ function Login() {
                             <div className="errors">Заполните "Пароль"</div>
                         </div>
                         <div className="mb-4">
-                            <button type="submit" onClick={evt=>HandleMouseEvent(navigate, email, password, setAuthenticated)} className="btn btn-login">Войти</button>
+                            <button type="submit" onClick={()=>HandleMouseEvent()} className="btn btn-login">Войти</button>
                         </div>
                     </form>
                 </section>
             </main>
-            </AuthContext.Provider>
         </React.Fragment>
     );
 }

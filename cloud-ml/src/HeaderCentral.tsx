@@ -14,7 +14,7 @@ function HeaderCentral(){
                         <div className="navbar-brand">
                             <Link to={main_page_link()}>
                                 <div className="logo">
-                                    <img src={logo} alt="logo" />
+                                    <img src={logo} width = {150} alt="logo" />
                                 </div>
                             </Link>
                             <Link className="nav-link" to={main_page_link()}> {site_name()} </Link>
