@@ -6,6 +6,7 @@ import Home from "./home";
 import Login from './login';
 import Profile from './profile';
 import Footer from './footer';
+import Regression from './regression';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={ <Home /> } />
           <Route path="/profile" element={ <Profile /> } />
           <Route path="/login" element={ <Login /> } />
+          <Route path="/regression" element={ <Regression /> } />
         </Routes>
         <Footer />
       </AuthContext.Provider>

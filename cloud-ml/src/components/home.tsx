@@ -13,7 +13,8 @@ function Home() {
         img_name={op.img_name} 
         name={op.name} 
         description={op.description} 
-        link={op.link} 
+        link={op.link}
+        page_link={op.page_link} 
     />);
 
     return (

@@ -10,5 +10,7 @@ main .profile-list{
 }
 
 main .profile-title{
+    font-size: larger;
     text-align: center;
+    font-weight: bold;
 }

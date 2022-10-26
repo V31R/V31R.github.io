@@ -13,14 +13,14 @@ function Profile() {
             <section className="profile-list">
                 <div>
                     <div className="profile-title mb-3">
-                        <b>Это ваш профиль</b>
+                        Это ваш профиль
                     </div>
                 </div>
                 <UnLoginButton />
             </section>
                 <div>
                     <div className="profile-title mb-3">
-                        <b>История действий</b>
+                        История действий
                     </div>
                     <TableHistory />
                 </div>
