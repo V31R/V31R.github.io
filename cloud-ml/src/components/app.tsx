@@ -15,6 +15,8 @@ import DataPreprocessingLeft from './dataPreprocessingLeft';
 import DataPreprocessingRight from './dataPreprocessingRight';
 import ClusterizationLeft from './clusterizationLeft';
 import ClusterizationRight from './clusterizationRight';
+import CorrelationLeft from './correlationLeft';
+import CorrelationRight from './correlationRight';
 
 function App() {
 
@@ -31,6 +33,7 @@ function App() {
           <Route path="/distribution" element={ <OperationTemplateComponent title ={"Распределение данных"} left ={<DistributionLeft key = {1}/> } right ={<DistributionRight key = {2}/> } />} />
           <Route path="/data-preprocessing" element={ <OperationTemplateComponent title ={"Предварительная обработка данных"} left ={<DataPreprocessingLeft key = {1}/> } right ={<DataPreprocessingRight key = {2}/> } />} />
           <Route path="/clusterization" element={ <OperationTemplateComponent title ={"Кластеризация"} left ={<ClusterizationLeft key = {1}/> } right ={<ClusterizationRight key = {2}/> } />} />
+          <Route path="/correlation" element={ <OperationTemplateComponent title ={"Корреляция данных"} left ={<CorrelationLeft key = {1}/> } right ={<CorrelationRight key = {2}/> } />} />
         </Routes>
         <Footer />
       </AuthContext.Provider>
