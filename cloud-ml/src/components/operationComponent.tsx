@@ -15,9 +15,9 @@ function OperationComponent(props: Operation){
                         </Link>
                     </div>
                     <div className="product-title">
-                        <Link className="nav-link" to={props.link}>
+                        <a className="nav-link" href={props.link}>
                             <b>{props.name}</b>
-                        </Link>
+                        </a>
                     </div>
                     <br />
                     <div>{props.description}</div>
