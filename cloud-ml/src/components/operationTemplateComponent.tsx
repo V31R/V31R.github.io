@@ -1,29 +1,31 @@
 import React from 'react';
-import '../css/regression.css';
+import '../css/operationTemplateComponent.css';
 import FileLoad from './fileLoad';
 import Header from "./header";
 
-function Regression() {
+function OperationTemplateComponent(props: any) {
     return (
         <React.Fragment>
             <Header />
             <main className="container">
-                <section className = "reg-section"> 
+                <section className = "template-section"> 
                     <div>
-                        <h2>Регрессия</h2>
+                        <h2>{props.title}</h2>
                     </div>
                 </section>
                 <section className="functions-list row">
                     <section className = "function col-md-5 col-lg-5 mb-3">
-                    <div className= 'reg-title'>
+                    <div className= 'template-title'>
                         Параметры
-                    </div> 
+                    </div>
+                    { props.left } 
                     <FileLoad />
                     </section>
                     <section className = "function col-md-7 col-lg-7 mb-3"> 
-                    <div className= 'reg-title'>
+                    <div className= 'template-title'>
                         Результат
                     </div>
+                    { props.right } 
                     </section>
                 </section>
             </main>
@@ -31,4 +33,4 @@ function Regression() {
     );
 }
 
-export default Regression;
+export default OperationTemplateComponent;
