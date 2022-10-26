@@ -1,10 +1,10 @@
 import React from "react";
-import "./css/header.css";
+import "../css/header.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from './images/brain.png';
-import { main_page_link, site_name} from './globals';
+import logo from '../images/brain.png';
+import { main_page_link, site_name} from '../globals';
 import { Link } from "react-router-dom";
-import authContext from "./authContext";
+import authContext from "../authContext";
 
 function Header (){
     const isLogin = React.useContext(authContext);

@@ -1,8 +1,8 @@
 import React from "react";
-import './css/login.css';
-import HeaderCentral from "./HeaderCentral";
+import '../css/login.css';
+import HeaderCentral from "./headerCentral";
 import { useNavigate, NavigateFunction } from "react-router-dom";
-import authContext from "./authContext";
+import authContext from "../authContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {

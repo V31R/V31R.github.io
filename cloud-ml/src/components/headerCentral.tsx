@@ -1,8 +1,8 @@
 import React from "react";
-import "./css/header_central.css";
+import "../css/header_central.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from './images/brain.png';
-import {main_page_link, site_name} from './globals';
+import logo from '../images/brain.png';
+import {main_page_link, site_name} from '../globals';
 import { Link } from "react-router-dom";
 
 function HeaderCentral(){

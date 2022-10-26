@@ -1,7 +1,7 @@
 import React from "react";
-import './css/unlogin.css';
+import '../css/unlogin.css';
 import { useNavigate, NavigateFunction } from "react-router-dom";
-import authContext from "./authContext";
+import authContext from "../authContext";
 
 function UnLoginButton() {
     const navigate:NavigateFunction = useNavigate();
