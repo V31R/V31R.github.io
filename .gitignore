@@ -2,6 +2,7 @@
 
 # files type
 *.csv
+backend/images/*
 # python
 backend/venv
 backend/.idea
