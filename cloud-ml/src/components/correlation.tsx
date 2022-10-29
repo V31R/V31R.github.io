@@ -29,7 +29,7 @@ function Correlation() {
                         return response;
                     });
             });
-            let res: any=promise
+            promise
                 .then(
                     result => {
                         console.log(result);

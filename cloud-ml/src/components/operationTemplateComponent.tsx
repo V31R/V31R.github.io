@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../css/button_default.css';
 import '../css/operationTemplateComponent.css';
 import FileLoad from './fileLoad';
 import Header from "./header";
 
 function OperationTemplateComponent(props: any) {
-    const [data1, setData1] = useState<number>(0);
-
     return (
         <React.Fragment>
             <Header />
