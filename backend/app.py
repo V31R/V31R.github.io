@@ -1,12 +1,20 @@
 import logging
-import aiohttp
+
 import re
 from io import StringIO
 import pandas as pd
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sbn
+from matplotlib.colors import LinearSegmentedColormap
+
+
 from aiohttp import web
 import aiohttp_cors
+
+colors = ["#eae3f1", "#8f39eb"]
+cmap_name='purples_haze'
+purples_haze_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
 
 async def handle(request):
     name = request.rel_url.query['name']
@@ -33,8 +41,17 @@ async def get_corr_matrix(csvStringIO: StringIO, filename:str):
 async def handleCorrelationPost(request):
     if(request.headers.get('Content-type').find("multipart")==-1):
         return  web.Response(status = 400)
-    # reader = await request.multipart()
-    # p = await request.post()
+    colormap=purples_haze_cmap
+    if request.rel_url.query.get('colormap'):
+        try:
+            test_fig, test_ax = plt.subplots(figsize=(1, 1))
+            sbn.heatmap(data=[[1]], annot=True, axes=test_ax, cmap=request.rel_url.query.get('colormap'))
+            plt.close(test_fig)
+        except Exception as e:
+            logging.getLogger('aiohttp.server').error(e)
+            return web.Response(status=400)
+        colormap=request.rel_url.query.get('colormap')
+
     pattern = r".*\.csv$"
     async for field in (await request.multipart()):
         logging.getLogger('aiohttp.server').debug(f'File: {field.name}, {re.match(pattern, field.name, re.M)}')
@@ -44,7 +61,7 @@ async def handleCorrelationPost(request):
         csvStringIO = StringIO(str(token))
         corr_matrix = await get_corr_matrix(csvStringIO, field.name)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10,10))  # create figure & 1 axis
-        sbn.heatmap(corr_matrix, annot=True, axes=ax)
+        sbn.heatmap(corr_matrix, annot=True, axes=ax,cmap=colormap)
         image_name=f"images/{field.name[:field.name.find('.csv')]}_to.png"
         fig.savefig(image_name)  # save the figure to file
         plt.close(fig)
@@ -53,7 +70,6 @@ async def handleCorrelationPost(request):
         return resp
         #return web.Response(text=part.filename, content_type='application/json')
     logging.getLogger('aiohttp.server').debug('Have not file')
-    resp = web.FileResponse(f'im_server/pil_{key}.jpg')
     return web.Response()
 
 

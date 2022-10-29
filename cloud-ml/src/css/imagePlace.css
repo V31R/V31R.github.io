@@ -2,11 +2,12 @@
     width: 100%;
     aspect-ratio : 1 / 1;
     border: 2px solid rgb(222, 209, 236);
-    border-radius: 6px;
     align-items: center;
     position: relative;
     display: flex;
     flex-direction: column;
+    background-color: rgb(234, 227, 241);
+    padding: 1px;
 }
 
 .img-result{
