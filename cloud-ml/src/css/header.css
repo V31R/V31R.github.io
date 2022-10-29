@@ -3,9 +3,10 @@ header {
 }
 
 header .container {
+    position: relative;
     height: 100%;
+    flex-direction: row;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -13,12 +14,8 @@ header .navbar-brand {
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
 }
-
-header nav {
-    margin-left: auto;
-}
-
 
 nav .nav-link {
     color: #fff;

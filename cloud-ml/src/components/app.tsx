@@ -15,8 +15,17 @@ import DataPreprocessingLeft from './dataPreprocessingLeft';
 import DataPreprocessingRight from './dataPreprocessingRight';
 import ClusterizationLeft from './clusterizationLeft';
 import ClusterizationRight from './clusterizationRight';
-import CorrelationLeft from './correlationLeft';
-import CorrelationRight from './correlationRight';
+import Correlation from './correlation';
+
+function First(props:any){
+  console.log(props.data);
+  props.setData(props.data+1)
+}
+
+function Second(props:any){
+  console.log(props.data);
+  props.setData(props.data+2)
+}
 
 function App() {
 
@@ -29,11 +38,11 @@ function App() {
           <Route path="/" element={ <Home /> } />
           <Route path="/profile" element={ <Profile /> } />
           <Route path="/login" element={ <Login /> } />
-          <Route path="/regression" element={ <OperationTemplateComponent title ={"Регрессия"} left ={<RegressionLeft key = {1}/> } right ={<RegressionRight key = {2}/> } />} />
-          <Route path="/distribution" element={ <OperationTemplateComponent title ={"Распределение данных"} left ={<DistributionLeft key = {1}/> } right ={<DistributionRight key = {2}/> } />} />
-          <Route path="/data-preprocessing" element={ <OperationTemplateComponent title ={"Предварительная обработка данных"} left ={<DataPreprocessingLeft key = {1}/> } right ={<DataPreprocessingRight key = {2}/> } />} />
-          <Route path="/clusterization" element={ <OperationTemplateComponent title ={"Кластеризация"} left ={<ClusterizationLeft key = {1}/> } right ={<ClusterizationRight key = {2}/> } />} />
-          <Route path="/correlation" element={ <OperationTemplateComponent title ={"Корреляция данных"} left ={<CorrelationLeft key = {1}/> } right ={<CorrelationRight key = {2}/> } />} />
+          <Route path="/regression" element={ <OperationTemplateComponent title ={"Регрессия"} makeRequest={First} left ={<RegressionLeft key = {1}/> } right ={<RegressionRight key = {2}/> } />} />
+          <Route path="/distribution" element={ <OperationTemplateComponent title ={"Распределение данных"} makeRequest={Second} left ={<DistributionLeft key = {1}/> } right ={<DistributionRight key = {2}/> } />} />
+          <Route path="/data-preprocessing" element={ <OperationTemplateComponent title ={"Предварительная обработка данных"} makeRequest={First} left ={<DataPreprocessingLeft key = {1}/> } right ={<DataPreprocessingRight key = {2}/> } />} />
+          <Route path="/clusterization" element={ <OperationTemplateComponent title ={"Кластеризация"} makeRequest={First} left ={<ClusterizationLeft key = {1}/> } right ={<ClusterizationRight key = {2}/> } />} />
+          <Route path="/correlation" element={ <Correlation /> }/>
         </Routes>
         <Footer />
       </AuthContext.Provider>

@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Operation from '../operation';
+import '../css/button_default.css';
 import '../css/operation_component.css';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +25,7 @@ function OperationComponent(props: Operation){
                 </div>
                 <br />
                 <div className="mt-auto">
-                    <Link className="btn btn-try" to={props.page_link} type="button">Опробовать</Link>
+                    <Link className="btn button-default btn-try" to={props.page_link} type="button">Опробовать</Link>
                 </div>
             </div>
         </div>

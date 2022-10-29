@@ -1,32 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
+import '../css/button_default.css';
 import '../css/operationTemplateComponent.css';
 import FileLoad from './fileLoad';
 import Header from "./header";
 
 function OperationTemplateComponent(props: any) {
+    const [data1, setData1] = useState<number>(0);
+
     return (
         <React.Fragment>
             <Header />
             <main className="container">
-                <section className = "template-section"> 
+                <div className = "template-section"> 
                     <div>
                         <h2>{props.title}</h2>
                     </div>
-                </section>
+                </div>
                 <section className="functions-list row">
-                    <section className = "function col-md-5 col-lg-5 mb-3">
-                    <div className= 'template-title'>
-                        Параметры
+                    <div className="col-md-6 col-lg-6 mb-3">
+                        <div className="function">
+                            <div className='template-title'>
+                                Параметры
+                        </div>
+                            {props.left}
+                            <FileLoad />
+                        </div>
                     </div>
-                    { props.left } 
-                    <FileLoad />
-                    </section>
-                    <section className = "function col-md-7 col-lg-7 mb-3"> 
-                    <div className= 'template-title'>
-                        Результат
+                    <div className="function col-md-6 col-lg-6 mb-3">
+                        <div className='template-title'>
+                            Результат
+                        </div>
+                        {props.right}
                     </div>
-                    { props.right } 
-                    </section>
                 </section>
             </main>
         </React.Fragment>

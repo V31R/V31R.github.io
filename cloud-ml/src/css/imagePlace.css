@@ -1,0 +1,19 @@
+.image-result{
+    width: 100%;
+    aspect-ratio : 1 / 1;
+    border: 2px solid rgb(222, 209, 236);
+    border-radius: 6px;
+    align-items: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.img-result{
+    width: 100%;
+}
+.img-replacement{
+    text-align: center;
+    margin: auto;
+    color: rgb(160, 150, 172);
+}

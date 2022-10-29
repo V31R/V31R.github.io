@@ -21,7 +21,7 @@ function Header (){
             <nav>
                 <div className="navbar">
                     <div className="container">
-                        <div className="navbar-brand">
+                        <div className="navbar-brand left ms-0">
                             <Link to={main_page_link()}>
                                 <div className="logo">
                                     <img src={logo} width = {120} alt="logo" />
@@ -29,7 +29,7 @@ function Header (){
                             </Link>
                             <Link className="nav-link" to={main_page_link()}> {site_name()} </Link>
                         </div>
-                        <div className="navbar-brand">
+                        <div className="navbar-brand right me-0">
                             <Link className="nav-link" to={link}> Профиль </Link>
                         </div>
                     </div>

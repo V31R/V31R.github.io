@@ -1,4 +1,5 @@
 import React from "react";
+import '../css/button_default.css';
 import '../css/login.css';
 import HeaderCentral from "./headerCentral";
 import { useNavigate, NavigateFunction } from "react-router-dom";
@@ -39,7 +40,7 @@ function Login() {
                             <div className="errors">Заполните "Пароль"</div>
                         </div>
                         <div className="mb-4">
-                            <button type="submit" onClick={()=>HandleMouseEvent()} className="btn btn-login">Войти</button>
+                            <button type="submit" onClick={()=>HandleMouseEvent()} className="btn button-default btn-login">Войти</button>
                         </div>
                     </form>
                 </section>
