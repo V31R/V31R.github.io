@@ -47,7 +47,7 @@ async def handleCorrelationPost(request):
     if(request.headers.get('Content-type').find("multipart")==-1):
         return  web.Response(status = 400)
     colormap=purples_haze_cmap
-    if request.rel_url.query.get('colormap'):
+    if request.rel_url.query.get('colormap') and request.rel_url.query.get('colormap') !='':
         try:
             test_fig, test_ax = plt.subplots(figsize=(1, 1))
             sbn.heatmap(data=[[1]], annot=True, axes=test_ax, cmap=request.rel_url.query.get('colormap'))

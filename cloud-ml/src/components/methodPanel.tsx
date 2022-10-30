@@ -5,7 +5,7 @@ import '../css/button_default.css';
 function MethodPanel(props: any){
     return (
         <React.Fragment>
-            <div className="load-send row mb-auto">
+            <div className="load-send row">
                 <form className="file-form col-md-12 col-lg-8 mb-1">
                     <div className="form-group">
                         <label htmlFor="exampleFormControlFile1">Загрузите <b>.csv</b> файл с вашими данными</label>

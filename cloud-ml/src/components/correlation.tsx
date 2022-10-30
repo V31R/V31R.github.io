@@ -6,6 +6,8 @@ import Header from "./header";
 import Axios, { AxiosResponse } from 'axios';
 import ImagePlace from './imagePlace';
 import Matrix from './matrix';
+import StringInput from './stringInput';
+import StringInputData from '../stringInputData';
 
 interface CorrelationData{
     image_name: string,
@@ -14,10 +16,11 @@ interface CorrelationData{
 }
 
 function Correlation() {
-    const correaltionPath:string='http://localhost:8080/correlation';
+    const correlationPath:string='http://localhost:8080/correlation';
     const [correlationData, setCorrelationData] = React.useState<CorrelationData>({image_name:"", names: [], values:[]});
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
+    const [colorMap, setColorMap] = React.useState<string| null>(null);
     React.useEffect(() => {
         try {
             if(correlationData!.image_name===""){
@@ -25,7 +28,7 @@ function Correlation() {
             }
             console.log(correlationData)
             let promise = new Promise((resolve, reject) => {
-                Axios.get(`${correaltionPath}/${correlationData!.image_name}`,
+                Axios.get(`${correlationPath}/${correlationData!.image_name}`,
                     { responseType: 'arraybuffer' }
                 ).then
                 (response => {
@@ -63,11 +66,12 @@ function Correlation() {
         
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
+
         try {
             let promise = new Promise((resolve, reject) => {
-                Axios.post(correaltionPath,
+                Axios.post(correlationPath,
                     formData,
-                    { headers: { "Content-Type": "multipart/form-data" }, responseType:"json" }
+                    { params: { colormap: colorMap}, headers: { "Content-Type": "multipart/form-data" }, responseType:"json" }
                 ).then
                 (response => {
                     if (response.status !== 200){
@@ -103,6 +107,19 @@ function Correlation() {
         }
     }
 
+    const handleColorMap = (event: any) => {
+        setColorMap(event.target.value)
+    }
+
+    const inputColormap: StringInputData = {
+        mainLabel:'Введите название colormap', 
+        fieldName: 'color_map', 
+        defaultValue:'', 
+        tipLabel: 'Допустимые colormap',
+        tipLabelLink: 'https://matplotlib.org/stable/tutorials/colors/colormaps.html',
+        onChangeHandle:handleColorMap
+    };
+
     return (
         <React.Fragment>
             <Header />
@@ -117,8 +134,9 @@ function Correlation() {
                         <div className="function">
                             <div className='template-title mb-1'>
                                 Параметры
-                                </div>
+                            </div>
                             <MethodPanel onChange={handleFileSelect} onSend={handleSubmit} />
+                            <StringInput {...inputColormap}/>
                         </div>
                     </div>
                     <div className="col-md-12 col-lg-6 mt-1">
