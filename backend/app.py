@@ -7,7 +7,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sbn
 from matplotlib.colors import LinearSegmentedColormap
-
+import os
+import json
 
 from aiohttp import web
 import aiohttp_cors
@@ -15,7 +16,7 @@ import aiohttp_cors
 colors = ["#eae3f1", "#8f39eb"]
 cmap_name='purples_haze'
 purples_haze_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
-
+image_base_path='./images/'
 async def handle(request):
     name = request.rel_url.query['name']
     text = '{ "text":'+f'"Hello, {name}"'+'}'
@@ -32,11 +33,15 @@ async def get_corr_matrix(csvStringIO: StringIO, filename:str):
     df: pd.DataFrame = pd.read_csv(filename, sep=",", encoding='windows-1251')
     headers = [n for n in df]
     logging.getLogger('aiohttp.server').debug(f'{df}')
-    for header in headers:
-        logging.getLogger('aiohttp.server').debug(f'{df[header]}')
     corr_matrix = df.corr(numeric_only=True)
     logging.getLogger('aiohttp.server').debug(f'{corr_matrix}')
     return corr_matrix
+
+async def handleCorrelationGet(request):
+    image_name=request.match_info.get('image_name', 'error')
+    if not(image_name in os.listdir(image_base_path)):
+        return web.Response(status=400)
+    return web.FileResponse(image_base_path+image_name)
 
 async def handleCorrelationPost(request):
     if(request.headers.get('Content-type').find("multipart")==-1):
@@ -62,12 +67,20 @@ async def handleCorrelationPost(request):
         corr_matrix = await get_corr_matrix(csvStringIO, field.name)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10,10))  # create figure & 1 axis
         sbn.heatmap(corr_matrix, annot=True, axes=ax,cmap=colormap)
-        image_name=f"images/{field.name[:field.name.find('.csv')]}_to.png"
-        fig.savefig(image_name)  # save the figure to file
+        image_name=f"{field.name[:field.name.find('.csv')]}_to.png"
+        fig.savefig(image_base_path+image_name)  # save the figure to file
         plt.close(fig)
+        response: dict = dict()
+        response['image_name'] = image_name
+        response['names'] = [n for n in corr_matrix]
+        response['values']=[]
+        for i in range(0, len(corr_matrix)):
+            for n in response['names']:
+                response['values'].append(corr_matrix[n][i])
         logging.getLogger('aiohttp.server').debug(f'File: {field.name}')
-        resp = web.FileResponse(image_name)
-        return resp
+        #resp = web.FileResponse(image_name)
+
+        return web.json_response(text=json.dumps(response))
         #return web.Response(text=part.filename, content_type='application/json')
     logging.getLogger('aiohttp.server').debug('Have not file')
     return web.Response()
@@ -77,7 +90,10 @@ async def handleCorrelationPost(request):
 logging.basicConfig(level=logging.DEBUG)
 app = web.Application()
 
-app.add_routes([web.get('/', handle), web.post('/correlation', handleCorrelationPost)])
+app.add_routes([web.get('/', handle),
+                web.post('/correlation', handleCorrelationPost),
+                web.get('/correlation/{image_name}', handleCorrelationGet)
+                ])
 
 cors = aiohttp_cors.setup(app, defaults={
     "*": aiohttp_cors.ResourceOptions(

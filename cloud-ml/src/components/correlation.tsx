@@ -1,43 +1,90 @@
 import React from 'react';
 import '../css/operationTemplateComponent.css';
 import '../css/correlation.css';
-import FileLoad from './fileLoad';
+import MethodPanel from './methodPanel';
 import Header from "./header";
-import Axios from 'axios';
+import Axios, { AxiosResponse } from 'axios';
 import ImagePlace from './imagePlace';
+import Matrix from './matrix';
+
+interface CorrelationData{
+    image_name: string,
+    names: string[],
+    values: number[]
+}
 
 function Correlation() {
-
-    // a local state to store the currently selected file.
+    const correaltionPath:string='http://localhost:8080/correlation';
+    const [correlationData, setCorrelationData] = React.useState<CorrelationData>({image_name:"", names: [], values:[]});
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
-    const handleSubmit = async (event: any) => {
-        event.preventDefault()
-        const formData = new FormData();
-        formData.append(`${selectedFile.name}`, selectedFile);
+    React.useEffect(() => {
         try {
+            if(correlationData!.image_name===""){
+                return;
+            }
+            console.log(correlationData)
             let promise = new Promise((resolve, reject) => {
-                Axios.post(`http://localhost:8080/correlation`,
-                    formData,
-                    { headers: { "Content-Type": "multipart/form-data" }, responseType: 'arraybuffer' }
+                Axios.get(`${correaltionPath}/${correlationData!.image_name}`,
+                    { responseType: 'arraybuffer' }
                 ).then
-                    (response => {
-                        resolve(response);
-                        let base64ImageString: string = Buffer.from(response.data, 'binary').toString('base64');
-                        let srcValue: string = "data:image/png;base64," + base64ImageString;
-                        setImage(srcValue);
-                        return response;
-                    });
+                (response => {
+                    if (response.status !== 200){
+                        throw new Error('Произошла ошибка');
+                    }
+                    resolve(response);
+                    return response;
+                });
             });
             promise
                 .then(
                     result => {
-                        console.log(result);
-                        return result;
+                        let base64ImageString: string = Buffer.from((result as AxiosResponse<any, any>).data, 'binary').toString('base64');
+                        let srcValue: string = "data:image/png;base64," + base64ImageString;
+                        setImage(srcValue);
                     },
                     error => {
                         alert(error);
-                        return null
+                    }
+                );
+
+        } catch (error) {
+            console.log(error)
+        }
+      },
+    [correlationData]);
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault()
+        if(selectedFile == null){
+            alert('Загрузите файл формата *.csv');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append(`${selectedFile.name}`, selectedFile);
+        try {
+            let promise = new Promise((resolve, reject) => {
+                Axios.post(correaltionPath,
+                    formData,
+                    { headers: { "Content-Type": "multipart/form-data" }, responseType:"json" }
+                ).then
+                (response => {
+                    if (response.status !== 200){
+                        throw new Error('Произошла ошибка');
+                    }
+                    resolve(response);
+                    return response;
+                });
+            });
+            promise
+                .then(
+                    result => {
+                        let data: CorrelationData = (result as AxiosResponse<any, any>).data;
+                        setCorrelationData(corrData=>({...corrData,...data}));
+                    },
+                    error => {
+                        alert(error);
                     }
                 );
 
@@ -48,8 +95,12 @@ function Correlation() {
     }
 
     const handleFileSelect = (event: any) => {
-        setSelectedFile(event.target.files[0]);
-        console.log(event.target.files[0], event.target.files[0].name);
+        if(event.target.files[0] !== undefined){
+            setSelectedFile(event.target.files[0]);
+            console.log(event.target.files[0], event.target.files[0].name);
+        }else{
+            setSelectedFile(null);
+        }
     }
 
     return (
@@ -67,7 +118,7 @@ function Correlation() {
                             <div className='template-title mb-1'>
                                 Параметры
                                 </div>
-                            <FileLoad onChange={handleFileSelect} onSend={handleSubmit} />
+                            <MethodPanel onChange={handleFileSelect} onSend={handleSubmit} />
                         </div>
                     </div>
                     <div className="col-md-12 col-lg-6 mt-1">
@@ -76,6 +127,7 @@ function Correlation() {
                                 Результат
                             </div>
                             <ImagePlace image={image} />
+                            <Matrix names={correlationData.names} values ={correlationData.values}/>
                         </div>
                     </div>
                 </section>

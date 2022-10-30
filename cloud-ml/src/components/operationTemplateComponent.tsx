@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/button_default.css';
 import '../css/operationTemplateComponent.css';
-import FileLoad from './fileLoad';
+import MethodPanel from './methodPanel';
 import Header from "./header";
 
 function OperationTemplateComponent(props: any) {
@@ -21,7 +21,7 @@ function OperationTemplateComponent(props: any) {
                                 Параметры
                         </div>
                             {props.left}
-                            <FileLoad />
+                            <MethodPanel />
                         </div>
                     </div>
                     <div className="function col-md-6 col-lg-6 mb-3">

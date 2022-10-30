@@ -8,14 +8,10 @@ import authContext from "../authContext";
 
 function Header (){
     const isLogin = React.useContext(authContext);
-    // eslint-disable-next-line
-    
-    console.log(isLogin)
     let link: string = '/login';
     if (isLogin!.authenticated) {
         link = '/profile';
     }
-    console.log(link);
     return (
         <header>
             <nav>

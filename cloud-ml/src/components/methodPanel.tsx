@@ -1,12 +1,11 @@
 import React from 'react';
-import '../css/fileLoad.css';
+import '../css/methodPanel.css';
 import '../css/button_default.css';
 
-function FileLoad(props: any){
-    console.log(props);
+function MethodPanel(props: any){
     return (
         <React.Fragment>
-            <div className="load-send row mt-auto">
+            <div className="load-send row mb-auto">
                 <form className="file-form col-md-12 col-lg-8 mb-1">
                     <div className="form-group">
                         <label htmlFor="exampleFormControlFile1">Загрузите <b>.csv</b> файл с вашими данными</label>
@@ -19,4 +18,4 @@ function FileLoad(props: any){
     );
 }
 
-export default FileLoad;
+export default MethodPanel;
