@@ -5,15 +5,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sbn
 from matplotlib.colors import LinearSegmentedColormap
-import os
 import json
 
 from aiohttp import web
+from save_image import image_base_path
+from utils import save_df_from_io
+
 
 colors = ["#eae3f1", "#8f39eb"]
 cmap_name = 'purples_haze'
 purples_haze_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
-image_base_path = './images/'
 
 
 async def handle(request):
@@ -24,27 +25,12 @@ async def handle(request):
     return web.Response(text=text, content_type='application/json')
 
 
-# ,headers={"Access-Control-Allow-Origin": "*"}
-
 async def get_corr_matrix(csvStringIO: StringIO, filename: str):
-    logging.getLogger('aiohttp.server').debug(f'{csvStringIO}')
-    file = open(filename, 'w')
-    file.writelines(csvStringIO)
-    file.close()
-    df: pd.DataFrame = pd.read_csv(filename, sep=",", encoding='windows-1251')
-    headers = [n for n in df]
+    df: pd.DataFrame = await save_df_from_io(csvStringIO, filename)
     logging.getLogger('aiohttp.server').debug(f'{df}')
     corr_matrix = df.corr(numeric_only=True)
     logging.getLogger('aiohttp.server').debug(f'{corr_matrix}')
     return corr_matrix
-
-
-async def handleCorrelationGet(request):
-    image_name = request.match_info.get('image_name', 'error')
-    if not (image_name in os.listdir(image_base_path)):
-        return web.Response(status=400)
-    return web.FileResponse(image_base_path + image_name)
-
 
 async def handleCorrelationPost(request):
     if request.headers.get('Content-type').find("multipart") == -1:
@@ -70,7 +56,7 @@ async def handleCorrelationPost(request):
         corr_matrix = await get_corr_matrix(csvStringIO, field.name)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))  # create figure & 1 axis
         sbn.heatmap(corr_matrix, annot=True, axes=ax, cmap=colormap)
-        image_name = f"{field.name[:field.name.find('.csv')]}_to.png"
+        image_name = f"{field.name[:field.name.find('.csv')]}_correlation.png"
         fig.savefig(image_base_path + image_name)  # save the figure to file
         plt.close(fig)
         response: dict = dict()

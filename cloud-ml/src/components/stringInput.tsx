@@ -1,13 +1,14 @@
 import React from 'react';
 import '../css/stringInput.css';
-import StringInputData from '../stringInputData';
+import InputData from '../inputData';
 
-function StringInput(props: StringInputData) {
+function StringInput(props: InputData) {
+
     return (
         <React.Fragment>
             <div>
                 <div><label>{props.mainLabel}</label></div>
-                <div><input type="text" className="w-100 input-window" name={props.fieldName} placeholder={props.defaultValue} onChange={props.onChangeHandle}/></div>
+                <div><input type="text" className="w-100 input-window"  name={props.fieldName} placeholder={props.defaultValue} onChange={event=>props.onChangeHandle(event)}/></div>
                 {props.tipLabel !== undefined && 
                 <div className='tip'>
                     { props.tipLabelLink !== undefined &&

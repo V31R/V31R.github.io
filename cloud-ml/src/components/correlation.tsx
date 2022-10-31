@@ -7,7 +7,7 @@ import Axios, { AxiosResponse } from 'axios';
 import ImagePlace from './imagePlace';
 import Matrix from './matrix';
 import StringInput from './stringInput';
-import StringInputData from '../stringInputData';
+import InputData from '../inputData';
 
 interface CorrelationData {
     image_name: string,
@@ -17,6 +17,7 @@ interface CorrelationData {
 
 function Correlation() {
     const correlationPath: string = 'http://localhost:8080/correlation';
+    const imagePath: string = 'http://localhost:8080/images';
     const [correlationData, setCorrelationData] = React.useState<CorrelationData>({ image_name: "", names: [], values: [] });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
@@ -28,7 +29,7 @@ function Correlation() {
             }
             console.log(correlationData)
             let promise = new Promise((resolve, reject) => {
-                Axios.get(`${correlationPath}/${correlationData!.image_name}`,
+                Axios.get(`${imagePath}/${correlationData!.image_name}`,
                     { responseType: 'arraybuffer' }
                 ).then
                     (response => {
@@ -110,7 +111,7 @@ function Correlation() {
         setColorMap(event.target.value)
     }
 
-    const inputColormap: StringInputData = {
+    const inputColormap: InputData = {
         mainLabel: 'Введите название colormap',
         fieldName: 'color_map',
         defaultValue: '',
