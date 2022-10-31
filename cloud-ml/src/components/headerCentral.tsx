@@ -11,13 +11,13 @@ function HeaderCentral(){
             <nav>
                 <div className="navbar">
                     <div className="container">
-                        <div className="navbar-brand">
-                            <Link to={main_page_link()}>
+                    <div className="navbar-brand row">
+                            <Link to={main_page_link()} className="col-md-4 col-lg-4">
                                 <div className="logo">
-                                    <img src={logo} width = {150} alt="logo" />
+                                    <img className="logo-image"src={logo} width = {150} alt="logo" />
                                 </div>
                             </Link>
-                            <Link className="nav-link" to={main_page_link()}> {site_name()} </Link>
+                            <Link className="nav-link col-md-8 col-lg-8 logo-link" to={main_page_link()}> {site_name()} </Link>
                         </div>
                     </div>
                 </div>

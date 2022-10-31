@@ -1,7 +1,6 @@
 import "../css/matrix.css";
 
 function MatrixComponent(props: any){
-    console.log(props);
     let values: JSX.Element[] = props.values.map((value: number)=><div className='matrix-cell'><div className='text'>{value}</div></div>);
     let columnClass: string="matrix-column mt-1 ";
     let value: number=2;

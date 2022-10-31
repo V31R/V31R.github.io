@@ -9,21 +9,21 @@ import Matrix from './matrix';
 import StringInput from './stringInput';
 import StringInputData from '../stringInputData';
 
-interface CorrelationData{
+interface CorrelationData {
     image_name: string,
     names: string[],
     values: number[]
 }
 
 function Correlation() {
-    const correlationPath:string='http://localhost:8080/correlation';
-    const [correlationData, setCorrelationData] = React.useState<CorrelationData>({image_name:"", names: [], values:[]});
+    const correlationPath: string = 'http://localhost:8080/correlation';
+    const [correlationData, setCorrelationData] = React.useState<CorrelationData>({ image_name: "", names: [], values: [] });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
-    const [colorMap, setColorMap] = React.useState<string| null>(null);
+    const [colorMap, setColorMap] = React.useState<string | null>(null);
     React.useEffect(() => {
         try {
-            if(correlationData!.image_name===""){
+            if (correlationData!.image_name === "") {
                 return;
             }
             console.log(correlationData)
@@ -31,13 +31,12 @@ function Correlation() {
                 Axios.get(`${correlationPath}/${correlationData!.image_name}`,
                     { responseType: 'arraybuffer' }
                 ).then
-                (response => {
-                    if (response.status !== 200){
-                        throw new Error('Произошла ошибка');
-                    }
-                    resolve(response);
-                    return response;
-                });
+                    (response => {
+                        resolve(response);
+                    })
+                    .catch((e: Error) => {
+                        reject(e);
+                    });;
             });
             promise
                 .then(
@@ -47,23 +46,24 @@ function Correlation() {
                         setImage(srcValue);
                     },
                     error => {
-                        alert(error);
+                        alert(`${error.response.status} ${error.response.data}.`);
                     }
                 );
 
         } catch (error) {
             console.log(error)
         }
-      },
-    [correlationData]);
+    },
+        [correlationData]
+    );
 
     const handleSubmit = async (event: any) => {
         event.preventDefault()
-        if(selectedFile == null){
+        if (selectedFile == null) {
             alert('Загрузите файл формата *.csv');
             return;
         }
-        
+
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
@@ -71,24 +71,23 @@ function Correlation() {
             let promise = new Promise((resolve, reject) => {
                 Axios.post(correlationPath,
                     formData,
-                    { params: { colormap: colorMap}, headers: { "Content-Type": "multipart/form-data" }, responseType:"json" }
+                    { params: { colormap: colorMap }, headers: { "Content-Type": "multipart/form-data" }, responseType: "json" }
                 ).then
-                (response => {
-                    if (response.status !== 200){
-                        throw new Error('Произошла ошибка');
-                    }
-                    resolve(response);
-                    return response;
-                });
+                    (response => {
+                        resolve(response);
+                    })
+                    .catch((e: Error) => {
+                        reject(e);
+                    });
             });
             promise
                 .then(
                     result => {
                         let data: CorrelationData = (result as AxiosResponse<any, any>).data;
-                        setCorrelationData(corrData=>({...corrData,...data}));
+                        setCorrelationData(corrData => ({ ...corrData, ...data }));
                     },
                     error => {
-                        alert(error);
+                        alert(`${error.response.status} ${error.response.data}.`);
                     }
                 );
 
@@ -99,10 +98,10 @@ function Correlation() {
     }
 
     const handleFileSelect = (event: any) => {
-        if(event.target.files[0] !== undefined){
+        if (event.target.files[0] !== undefined) {
             setSelectedFile(event.target.files[0]);
             console.log(event.target.files[0], event.target.files[0].name);
-        }else{
+        } else {
             setSelectedFile(null);
         }
     }
@@ -112,12 +111,12 @@ function Correlation() {
     }
 
     const inputColormap: StringInputData = {
-        mainLabel:'Введите название colormap', 
-        fieldName: 'color_map', 
-        defaultValue:'', 
+        mainLabel: 'Введите название colormap',
+        fieldName: 'color_map',
+        defaultValue: '',
         tipLabel: 'Допустимые colormap',
         tipLabelLink: 'https://matplotlib.org/stable/tutorials/colors/colormaps.html',
-        onChangeHandle:handleColorMap
+        onChangeHandle: handleColorMap
     };
 
     return (
@@ -136,7 +135,7 @@ function Correlation() {
                                 Параметры
                             </div>
                             <MethodPanel onChange={handleFileSelect} onSend={handleSubmit} />
-                            <StringInput {...inputColormap}/>
+                            <StringInput {...inputColormap} />
                         </div>
                     </div>
                     <div className="col-md-12 col-lg-6 mt-1">
@@ -145,7 +144,7 @@ function Correlation() {
                                 Результат
                             </div>
                             <ImagePlace image={image} />
-                            <Matrix names={correlationData.names} values ={correlationData.values}/>
+                            <Matrix names={correlationData.names} values={correlationData.values} />
                         </div>
                     </div>
                 </section>

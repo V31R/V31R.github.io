@@ -20,3 +20,21 @@ header .navbar-brand {
 nav .nav-link {
     color: #fff;
 }
+
+nav .nav-link:focus {
+    color: #fff;
+}
+
+header .logo{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-image{
+    margin: auto;
+}
+.logo-link{
+    text-align: center;
+}
