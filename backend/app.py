@@ -2,16 +2,16 @@ import logging
 
 from aiohttp import web
 import aiohttp_cors
-from correlation import handleCorrelationPost
+from correlation import handle_correlation_post
 from save_image import handleImageGet
-from clusterization import handleClusterizationPost
+from clusterization import handle_clusterization_post
 
 logging.basicConfig(level=logging.DEBUG)
 app = web.Application()
 
 app.add_routes([
-    web.post('/correlation', handleCorrelationPost),
-    web.post('/clusterization', handleClusterizationPost),
+    web.post('/correlation', handle_correlation_post),
+    web.post('/clusterization', handle_clusterization_post),
     web.get('/images/{image_name}', handleImageGet)
 ])
 

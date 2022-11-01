@@ -1,6 +1,5 @@
 import logging
 import re
-from io import StringIO
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sbn
@@ -9,30 +8,14 @@ import json
 
 from aiohttp import web
 from save_image import image_base_path
-from utils import save_df_from_io
+from utils import get_df_from_io, get_corr_matrix
 
 
 colors = ["#eae3f1", "#8f39eb"]
 cmap_name = 'purples_haze'
 purples_haze_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
 
-
-async def handle(request):
-    name = request.rel_url.query['name']
-    text = '{ "text":' + f'"Hello, {name}"' + '}'
-    for h in request.config_dict:
-        print(h)
-    return web.Response(text=text, content_type='application/json')
-
-
-async def get_corr_matrix(csvStringIO: StringIO, filename: str):
-    df: pd.DataFrame = await save_df_from_io(csvStringIO, filename)
-    logging.getLogger('aiohttp.server').debug(f'{df}')
-    corr_matrix = df.corr(numeric_only=True)
-    logging.getLogger('aiohttp.server').debug(f'{corr_matrix}')
-    return corr_matrix
-
-async def handleCorrelationPost(request):
+async def handle_correlation_post(request):
     if request.headers.get('Content-type').find("multipart") == -1:
         return web.Response(status=400, text='Недопустимый Content-type')
     colormap = purples_haze_cmap
@@ -48,12 +31,12 @@ async def handleCorrelationPost(request):
 
     pattern = r".*\.csv$"
     async for field in (await request.multipart()):
-        logging.getLogger('aiohttp.server').debug(f'File: {field.name}, {re.match(pattern, field.name, re.M)}')
+        logging.getLogger('aiohttp.server').info(f'File: {field.name}')
         if re.match(pattern, field.name, re.M) is None:
             return web.Response(status=415, text=f"Недопустимый формат файла")
-        token = (await field.read()).decode()
-        csvStringIO = StringIO(str(token))
-        corr_matrix = await get_corr_matrix(csvStringIO, field.name)
+        data: bytearray = await field.read()
+        df: pd.DataFrame = await get_df_from_io(data, field.name)
+        corr_matrix: pd.DataFrame = await get_corr_matrix(df)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))  # create figure & 1 axis
         sbn.heatmap(corr_matrix, annot=True, axes=ax, cmap=colormap)
         image_name = f"{field.name[:field.name.find('.csv')]}_correlation.png"
