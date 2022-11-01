@@ -7,7 +7,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import json
 
 from aiohttp import web
-from save_image import image_base_path
+from images import image_base_path
 from utils import get_df_from_io, get_corr_matrix
 
 
@@ -50,9 +50,7 @@ async def handle_correlation_post(request):
             for n in response['names']:
                 response['values'].append(corr_matrix[n][i])
         logging.getLogger('aiohttp.server').debug(f'File: {field.name}')
-        # resp = web.FileResponse(image_name)
-
         return web.json_response(text=json.dumps(response))
-        # return web.Response(text=part.filename, content_type='application/json')
+
     logging.getLogger('aiohttp.server').debug('Have not file')
     return web.Response()

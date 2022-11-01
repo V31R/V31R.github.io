@@ -3,7 +3,7 @@ import logging
 from aiohttp import web
 import aiohttp_cors
 from correlation import handle_correlation_post
-from save_image import handleImageGet
+from images import handleImageGet
 from clusterization import handle_clusterization_post
 
 logging.basicConfig(level=logging.DEBUG)

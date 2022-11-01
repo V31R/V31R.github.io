@@ -10,7 +10,9 @@ import InputData from '../inputData';
 import Axios, {AxiosResponse } from 'axios';
 
 interface ClusterizationData{
-    image_name: string
+    image_name: string,
+    clusters_centers: any,
+    clusters_labels: number[]
 }
 
 function Clusterization() {
@@ -21,7 +23,7 @@ function Clusterization() {
     const [image, setImage] = React.useState<null | any>(null);
     const [clustersNumber, setClustersNumber] = React.useState<number>(1);
     // eslint-disable-next-line
-    const [clusterizationData, setClusterizationData] = React.useState<ClusterizationData>({image_name: ""});
+    const [clusterizationData, setClusterizationData] = React.useState<ClusterizationData>({image_name: "", clusters_centers: [], clusters_labels:[]});
 
     React.useEffect(() => {
         try {
@@ -60,13 +62,46 @@ function Clusterization() {
     );
 
     const handleSubmit=(event: any) =>{
+        event.preventDefault()
+        if (selectedFile == null) {
+            alert('Загрузите файл формата *.csv');
+            return;
+        }
         if(clustersNumber <= 0){
             alert('Количество кластеров должно быть >=1');
             return;
         }
-        console.log(clusterizationPath)
-        console.log(withCenters)
-        console.log(selectedFile)
+
+        const formData = new FormData();
+        formData.append(`${selectedFile.name}`, selectedFile);
+
+        try {
+            let promise = new Promise((resolve, reject) => {
+                Axios.post(clusterizationPath,
+                    formData,
+                    { params: { clusters_num: clustersNumber, clusters_centers:withCenters }, headers: { "Content-Type": "multipart/form-data" }, responseType: "json" }
+                ).then
+                    (response => {
+                        resolve(response);
+                    })
+                    .catch((e: Error) => {
+                        reject(e);
+                    });
+            });
+            promise
+                .then(
+                    result => {
+                        let data: ClusterizationData = (result as AxiosResponse<any, any>).data;
+                        setClusterizationData(clustData => ({ ...clustData, ...data }));
+                    },
+                    error => {
+                        alert(`${error.response.status} ${error.response.data}.`);
+                    }
+                );
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleFileSelect = (event: any) => {
@@ -89,7 +124,7 @@ function Clusterization() {
 
     const inputClusterNumber: InputData = {
         mainLabel: 'Введите количество кластеров',
-        fieldName: 'cluster_num',
+        fieldName: 'clusters_num',
         defaultValue: '1',
         min: "1",
         onChangeHandle: handleClusterNumber
