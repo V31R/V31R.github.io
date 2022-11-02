@@ -3,14 +3,32 @@ import '../css/operationTemplateComponent.css';
 import '../css/regression.css';
 import MethodPanel from './methodPanel';
 import Header from "./header";
+import { getImage } from '../apis/imageApi';
+import ImagePlace from './imagePlace';
 
+interface RegressionData {
+    image_name: string,
+    names: string[]
+}
 
 function Regression() {
+    // eslint-disable-next-line
+    const [regerssionData, setRegressionData] = React.useState<RegressionData>({ image_name: "", names: [] });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
-
-    const handleSubmit=(event: any) =>{
+    const [image, setImage] = React.useState<null | any>(null);
+    React.useEffect(() => {
+        if (regerssionData!.image_name === "") {
+            return;
+        }
+        console.log(regerssionData)
+        getImage(setImage, regerssionData!.image_name);
+    },
+        [regerssionData]
+    );
+    const handleSubmit = (event: any) => {
         console.log(selectedFile)
     }
+
 
     const handleFileSelect = (event: any) => {
         if (event.target.files[0] !== undefined) {
@@ -44,6 +62,7 @@ function Regression() {
                             <div className='template-title mb-1'>
                                 Результат
                             </div>
+                            <ImagePlace image={image} />
                         </div>
                     </div>
                 </section>

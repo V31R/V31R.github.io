@@ -3,11 +3,28 @@ import '../css/operationTemplateComponent.css';
 import '../css/distribution.css';
 import MethodPanel from './methodPanel';
 import Header from "./header";
+import { getImage } from '../apis/imageApi';
+import ImagePlace from './imagePlace';
 
+interface DistributionData {
+    image_name: string,
+    names: string[]
+}
 
 function Distribution() {
+    // eslint-disable-next-line
+    const [distributionData, setDistributionData] = React.useState<DistributionData>({ image_name: "", names: [] });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
-
+    const [image, setImage] = React.useState<null | any>(null);
+    React.useEffect(() => {
+        if (distributionData!.image_name === "") {
+                return;
+        }
+        console.log(distributionData)
+        getImage( setImage, distributionData!.image_name);
+    },
+        [distributionData]
+    );
     const handleSubmit=(event: any) =>{
         console.log(selectedFile)
     }
@@ -44,6 +61,7 @@ function Distribution() {
                             <div className='template-title mb-1'>
                                 Результат
                             </div>
+                            <ImagePlace image={image} />
                         </div>
                     </div>
                 </section>
