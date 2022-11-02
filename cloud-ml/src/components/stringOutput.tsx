@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/stringInput.css';
+import '../css/inputElementStyle.css';
 import OutputData from '../outputData';
 
 function StringOutput(props: OutputData) {

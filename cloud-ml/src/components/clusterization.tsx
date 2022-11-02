@@ -145,8 +145,8 @@ function Clusterization() {
 
     let outputColumnsName: OutputData ={
         mainLabel: 'Имена столбцов',
-        defaultValue: 'Здесь будут имена столбцов, участвовавших в кластеризации',
-        tipLabel: 'Столбцы, которые не являются числовыми игнорируются',
+        defaultValue: 'Здесь будут имена столбцов участвовавших в кластеризации',
+        tipLabel: 'Столбцы, которые не являются числовыми, игнорируются',
         value: null
     }
 
@@ -160,7 +160,6 @@ function Clusterization() {
     let outputClustersCenters: OutputData ={
         mainLabel: 'Центры кластеров',
         defaultValue: 'Здесь будут центры кластеров',
-        tipLabel: 'Элемент массива - массивы с координатами центров кластеров',
         value: null
     }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/stringInput.css';
+import '../css/inputElementStyle.css';
 import InputData from '../inputData';
 
 function StringInput(props: InputData) {
