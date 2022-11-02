@@ -70,6 +70,7 @@ async def handle_clusterization_post(request):
         response['image_name'] = image_name
         response['clusters_centers'] = clusters.cluster_centers_.tolist()
         response['clusters_labels'] = clusters.labels_.tolist()
+        response['columns_names'] = headers
         return web.json_response(text=json.dumps(response))
     logging.getLogger('aiohttp.server').info('Have not file')
     return web.Response()

@@ -8,11 +8,14 @@ import ImagePlace from './imagePlace';
 import NumberInput from './numberInput';
 import InputData from '../inputData';
 import Axios, {AxiosResponse } from 'axios';
+import StringOutput from './stringOutput';
+import OutputData from '../outputData';
 
 interface ClusterizationData{
     image_name: string,
-    clusters_centers: any,
-    clusters_labels: number[]
+    clusters_centers: any | null,
+    clusters_labels: number[] | null,
+    columns_names: string[] | null
 }
 
 function Clusterization() {
@@ -22,8 +25,12 @@ function Clusterization() {
     const [withCenters, setWithCenters] = React.useState<boolean>(false);
     const [image, setImage] = React.useState<null | any>(null);
     const [clustersNumber, setClustersNumber] = React.useState<number>(1);
-    // eslint-disable-next-line
-    const [clusterizationData, setClusterizationData] = React.useState<ClusterizationData>({image_name: "", clusters_centers: [], clusters_labels:[]});
+    const [clusterizationData, setClusterizationData] = React.useState<ClusterizationData>({
+        image_name: "", 
+        clusters_centers: null, 
+        clusters_labels:null, 
+        columns_names:null
+    });
 
     React.useEffect(() => {
         try {
@@ -135,6 +142,43 @@ function Clusterization() {
         text:"Рисовать центры кластеров", 
         onChangeHandle:handleCenterCheckBox
     };
+
+    let outputColumnsName: OutputData ={
+        mainLabel: 'Имена столбцов',
+        defaultValue: 'Здесь будут имена столбцов, участвовавших в кластеризации',
+        tipLabel: 'Столбцы, которые не являются числовыми игнорируются',
+        value: null
+    }
+
+    let outputClusters: OutputData ={
+        mainLabel: 'Кластеры',
+        defaultValue: 'Здесь будет массив кластеров',
+        tipLabel: 'Элемент массива - индекс кластера, к которому принадлежит элемент',
+        value: null
+    }
+
+    let outputClustersCenters: OutputData ={
+        mainLabel: 'Центры кластеров',
+        defaultValue: 'Здесь будут центры кластеров',
+        tipLabel: 'Элемент массива - массивы с координатами центров кластеров',
+        value: null
+    }
+
+    let clustersCenters: JSX.Element[] = [];
+    for(let center in clusterizationData.clusters_centers){
+        let v: string = "";
+        for(let index in clusterizationData.clusters_centers[center]){
+            v+=clusterizationData.clusters_centers[center][index].toFixed(4) + " "
+        }
+        clustersCenters.push(
+        <StringOutput {...{
+            mainLabel:`Центр кластерa ${center}`,
+            value: v,
+            defaultValue: '',
+        }}/>)
+    }
+
+
     return (
         <React.Fragment>
             <Header />
@@ -161,6 +205,10 @@ function Clusterization() {
                                 Результат
                             </div>
                             <ImagePlace image={image} />
+                            <StringOutput {...outputColumnsName} {...{value: clusterizationData.columns_names}} />
+                            <StringOutput {...outputClusters} {...{value: clusterizationData.clusters_labels}} />
+                            {clustersCenters.length === 0 && <StringOutput {...outputClustersCenters} {...{value: clusterizationData.clusters_centers}} />}
+                            {clustersCenters.length > 0 && clustersCenters }
                         </div>
                     </div>
                 </section>
