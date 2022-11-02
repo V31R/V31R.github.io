@@ -7,9 +7,10 @@ import CheckBox, {CheckBoxData} from './checkBox';
 import ImagePlace from './imagePlace';
 import NumberInput from './numberInput';
 import InputData from '../inputData';
-import Axios, {AxiosResponse } from 'axios';
 import StringOutput from './stringOutput';
 import OutputData from '../outputData';
+import { getImage } from '../apis/imageApi';
+import { postClusterization } from '../apis/taskApi';
 
 interface ClusterizationData{
     image_name: string,
@@ -19,8 +20,6 @@ interface ClusterizationData{
 }
 
 function Clusterization() {
-    const clusterizationPath: string = 'http://localhost:8080/clusterization';
-    const imagePath: string = 'http://localhost:8080/images';
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [withCenters, setWithCenters] = React.useState<boolean>(false);
     const [image, setImage] = React.useState<null | any>(null);
@@ -33,37 +32,10 @@ function Clusterization() {
     });
 
     React.useEffect(() => {
-        try {
-            if (clusterizationData!.image_name === "") {
-                return;
-            }
-            console.log(clusterizationData)
-            let promise = new Promise((resolve, reject) => {
-                Axios.get(`${imagePath}/${clusterizationData!.image_name}`,
-                    { responseType: 'arraybuffer' }
-                ).then
-                    (response => {
-                        resolve(response);
-                    })
-                    .catch((e: Error) => {
-                        reject(e);
-                    });;
-            });
-            promise
-                .then(
-                    result => {
-                        let base64ImageString: string = Buffer.from((result as AxiosResponse<any, any>).data, 'binary').toString('base64');
-                        let srcValue: string = "data:image/png;base64," + base64ImageString;
-                        setImage(srcValue);
-                    },
-                    error => {
-                        alert(`${error.response.status} ${error.response.data}.`);
-                    }
-                );
-
-        } catch (error) {
-            console.log(error)
+        if (clusterizationData!.image_name === "") {
+            return;
         }
+        getImage( setImage, clusterizationData!.image_name);
     },
         [clusterizationData]
     );
@@ -82,33 +54,7 @@ function Clusterization() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        try {
-            let promise = new Promise((resolve, reject) => {
-                Axios.post(clusterizationPath,
-                    formData,
-                    { params: { clusters_num: clustersNumber, clusters_centers:withCenters }, headers: { "Content-Type": "multipart/form-data" }, responseType: "json" }
-                ).then
-                    (response => {
-                        resolve(response);
-                    })
-                    .catch((e: Error) => {
-                        reject(e);
-                    });
-            });
-            promise
-                .then(
-                    result => {
-                        let data: ClusterizationData = (result as AxiosResponse<any, any>).data;
-                        setClusterizationData(clustData => ({ ...clustData, ...data }));
-                    },
-                    error => {
-                        alert(`${error.response.status} ${error.response.data}.`);
-                    }
-                );
-
-        } catch (error) {
-            console.log(error)
-        }
+        postClusterization(setClusterizationData, formData, clustersNumber, withCenters);
     }
 
     const handleFileSelect = (event: any) => {

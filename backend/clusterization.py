@@ -34,7 +34,6 @@ async def handle_clusterization_post(request):
             return web.Response(status=415, text=f"Недостаточно переменных для кластеризации")
         clusters = KMeans(n_clusters=clusters_num, init='random', n_init=10, max_iter=10)
         clusters.fit_predict(df)
-        logging.getLogger('aiohttp.server').debug(f'Clusters: {clusters.cluster_centers_} {clusters.labels_}')
         corr_matrix = await get_corr_matrix(df)
         headers: list = [n for n in corr_matrix]
         i_max: int = 0

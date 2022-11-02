@@ -3,11 +3,12 @@ import '../css/operationTemplateComponent.css';
 import '../css/correlation.css';
 import MethodPanel from './methodPanel';
 import Header from "./header";
-import Axios, { AxiosResponse } from 'axios';
 import ImagePlace from './imagePlace';
 import Matrix from './matrix';
 import StringInput from './stringInput';
 import InputData from '../inputData';
+import { getImage } from '../apis/imageApi';
+import { postCorrelation } from '../apis/taskApi';
 
 interface CorrelationData {
     image_name: string,
@@ -16,44 +17,16 @@ interface CorrelationData {
 }
 
 function Correlation() {
-    const correlationPath: string = 'http://localhost:8080/correlation';
-    const imagePath: string = 'http://localhost:8080/images';
     const [correlationData, setCorrelationData] = React.useState<CorrelationData>({ image_name: "", names: [], values: [] });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
     const [colorMap, setColorMap] = React.useState<string | null>(null);
     React.useEffect(() => {
-        try {
-            if (correlationData!.image_name === "") {
+        if (correlationData!.image_name === "") {
                 return;
-            }
-            console.log(correlationData)
-            let promise = new Promise((resolve, reject) => {
-                Axios.get(`${imagePath}/${correlationData!.image_name}`,
-                    { responseType: 'arraybuffer' }
-                ).then
-                    (response => {
-                        resolve(response);
-                    })
-                    .catch((e: Error) => {
-                        reject(e);
-                    });;
-            });
-            promise
-                .then(
-                    result => {
-                        let base64ImageString: string = Buffer.from((result as AxiosResponse<any, any>).data, 'binary').toString('base64');
-                        let srcValue: string = "data:image/png;base64," + base64ImageString;
-                        setImage(srcValue);
-                    },
-                    error => {
-                        alert(`${error.response.status} ${error.response.data}.`);
-                    }
-                );
-
-        } catch (error) {
-            console.log(error)
         }
+        console.log(correlationData)
+        getImage( setImage, correlationData!.image_name);
     },
         [correlationData]
     );
@@ -68,33 +41,7 @@ function Correlation() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        try {
-            let promise = new Promise((resolve, reject) => {
-                Axios.post(correlationPath,
-                    formData,
-                    { params: { colormap: colorMap }, headers: { "Content-Type": "multipart/form-data" }, responseType: "json" }
-                ).then
-                    (response => {
-                        resolve(response);
-                    })
-                    .catch((e: Error) => {
-                        reject(e);
-                    });
-            });
-            promise
-                .then(
-                    result => {
-                        let data: CorrelationData = (result as AxiosResponse<any, any>).data;
-                        setCorrelationData(corrData => ({ ...corrData, ...data }));
-                    },
-                    error => {
-                        alert(`${error.response.status} ${error.response.data}.`);
-                    }
-                );
-
-        } catch (error) {
-            console.log(error)
-        }
+        postCorrelation(setCorrelationData, formData, colorMap);
 
     }
 
