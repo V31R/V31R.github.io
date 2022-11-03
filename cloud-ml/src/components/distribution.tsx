@@ -5,17 +5,24 @@ import MethodPanel from './methodPanel';
 import Header from "./header";
 import { getImage } from '../apis/imageApi';
 import ImagePlace from './imagePlace';
+import { postDistribution } from '../apis/taskApi';
+import InputData from '../inputData';
+import StringInput from './stringInput';
+import OutputData from '../outputData';
+import StringOutput from './stringOutput';
 
 interface DistributionData {
     image_name: string,
-    names: string[]
+    name: string | null,
+    distribution_type: string | null
 }
 
 function Distribution() {
     // eslint-disable-next-line
-    const [distributionData, setDistributionData] = React.useState<DistributionData>({ image_name: "", names: [] });
+    const [distributionData, setDistributionData] = React.useState<DistributionData>({ image_name: "", name: null , distribution_type: null});
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
+    const [columnName, setColumnName] = React.useState<string | null>(null);
     React.useEffect(() => {
         if (distributionData!.image_name === "") {
                 return;
@@ -26,7 +33,16 @@ function Distribution() {
         [distributionData]
     );
     const handleSubmit=(event: any) =>{
-        console.log(selectedFile)
+        event.preventDefault()
+        if (selectedFile == null) {
+            alert('Загрузите файл формата *.csv');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append(`${selectedFile.name}`, selectedFile);
+
+        postDistribution(setDistributionData, formData, columnName);
     }
 
     const handleFileSelect = (event: any) => {
@@ -36,6 +52,31 @@ function Distribution() {
         } else {
             setSelectedFile(null);
         }
+    }
+
+    const handleColumnName = (event: any) => {
+        setColumnName(event.target.value)
+    }
+
+    const inputColumnName: InputData = {
+        mainLabel: 'Введите имя столбца',
+        fieldName: 'column_name',
+        defaultValue: '',
+        tipLabel: 'Если данные содержат больше одного числового столбца будет распределение будет составляться по введённому столбцу',
+        onChangeHandle: handleColumnName
+    };
+
+    let outputColumnName: OutputData ={
+        mainLabel: 'Имя столбца',
+        defaultValue: 'Здесь будет имя столбца, по которому было распределение',
+        tipLabel: 'Без заданного имени столбца берётся первый числовой столбец',
+        value: null
+    }
+
+    let outputDistributionType: OutputData ={
+        mainLabel: 'Тип распределения',
+        defaultValue: 'Здесь будет тип самого подходящего распределения',
+        value: null
     }
 
     return (
@@ -54,6 +95,7 @@ function Distribution() {
                                 Параметры
                             </div>
                             <MethodPanel onChange={handleFileSelect} onSend={handleSubmit} />
+                            <StringInput {...inputColumnName} />
                         </div>
                     </div>
                     <div className="col-md-12 col-lg-6 mt-1">
@@ -62,6 +104,8 @@ function Distribution() {
                                 Результат
                             </div>
                             <ImagePlace image={image} />
+                            <StringOutput {...outputColumnName} {...{value: distributionData.name}} />
+                            <StringOutput {...outputDistributionType} {...{value: distributionData.distribution_type}} />
                         </div>
                     </div>
                 </section>

@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+import numpy as np
 from datetime import datetime
 from chardet.universaldetector import UniversalDetector
 import os
@@ -49,3 +50,7 @@ async def get_df_from_io(input_data: bytearray, filename: str) -> pd.DataFrame:
 async def get_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
     corr_matrix = df.corr(numeric_only=True)
     return corr_matrix
+
+def get_only_numeric_columns(df: pd.DataFrame) -> pd.DataFrame:
+    only_numeric = df.select_dtypes(include=np.number)
+    return only_numeric

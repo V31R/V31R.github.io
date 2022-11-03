@@ -2,6 +2,7 @@ import Axios, { AxiosError } from "axios";
 
 const correlationPath: string = 'http://localhost:8080/correlation';
 const clusterizationPath: string = 'http://localhost:8080/clusterization';
+const distributionPath: string = 'http://localhost:8080/distribution';
 
 function postToTask(path: string, resultHandler: (data: any) => void, formData: FormData, parameters: Object){
     Axios.post(path,
@@ -30,4 +31,8 @@ export function postClusterization(resultHandler: (data: any) => void, formData:
             clusters_num: clustersNumber, 
             clusters_centers:withCenters 
         } )
+}
+
+export function postDistribution(resultHandler: (data: any) => void, formData: FormData, columnName: string | null) {
+    postToTask(distributionPath, resultHandler, formData, { column_name: columnName } )
 }

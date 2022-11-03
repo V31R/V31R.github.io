@@ -37,14 +37,14 @@ class HandleCorrelation(HandlesTemplate):
 
     async def work_with_df(self, request: web.Request, field: BodyPartReader) -> web.Response:
         corr_matrix: pd.DataFrame = await get_corr_matrix(self.df)
-        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))  # create figure & 1 axis
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
         sbn.heatmap(corr_matrix, annot=True, axes=ax, cmap=self.colormap)
         image_name = f"{field.name[:field.name.find('.csv')]}_correlation.png"
-        fig.savefig(image_base_path + image_name)  # save the figure to file
+        fig.savefig(image_base_path + image_name)
         plt.close(fig)
         response: dict = dict()
         response['image_name'] = image_name
-        response['names'] = [n for n in corr_matrix]
+        response['names'] = corr_matrix.columns
         response['values'] = []
         for i in range(0, len(corr_matrix)):
             for n in response['names']:
