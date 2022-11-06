@@ -7,6 +7,9 @@ backend/images/*
 backend/venv
 backend/.idea
 backend/__pycache__
+backend/tasks_request_handlers/__pycache__
+backend/distributions/__pycache__
+backend/patterns/__pycache__
 # dependencies
 cloud-ml/node_modules
 /.pnp

@@ -3,10 +3,10 @@ import logging
 from aiohttp import web
 import aiohttp_cors
 
-from correlation import post_correlation_handler
-from distribution import post_distribution_handler
+from tasks_request_handlers.correlation import post_correlation_handler
+from tasks_request_handlers.distribution import post_distribution_handler
 from images import handleImageGet
-from clusterization import post_clusterization_handler
+from tasks_request_handlers.clusterization import post_clusterization_handler
 
 logging.basicConfig(level=logging.DEBUG)
 app = web.Application()

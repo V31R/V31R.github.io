@@ -6,7 +6,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import json
 from aiohttp import web, BodyPartReader
 
-from HandlesTemplate import HandlesTemplate
+from .handles_template import HandlesTemplate
 from images import image_base_path
 from utils import get_corr_matrix
 

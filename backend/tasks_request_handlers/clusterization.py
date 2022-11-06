@@ -6,7 +6,7 @@ import seaborn as sbn
 import json
 from aiohttp import web, BodyPartReader
 
-from HandlesTemplate import HandlesTemplate
+from .handles_template import HandlesTemplate
 from utils import get_corr_matrix, get_only_numeric_columns
 from images import image_base_path
 
