@@ -1,8 +1,8 @@
 import React from "react";
 import '../css/profile.css';
-import HeaderCentral from "./headerCentral";
-import UnLoginButton from "./unloginButton";
-import TableHistory from "./tableHistory";
+import HeaderCentral from "../components/headerCentral";
+import UnLoginButton from "../components/unloginButton";
+import TableHistory from "../components/tableHistory";
 
 function Profile() {
 

@@ -1,17 +1,17 @@
 import React from 'react';
-import '../css/App.css';
+import './css/App.css';
 import { Routes, Route } from "react-router-dom";
-import AuthContext from '../authContext'
-import Home from "./home";
-import Login from './login';
-import Profile from './profile';
-import Footer from './footer';
+import AuthContext from './authContext'
+import Home from "./pages/home";
+import Login from './pages/login';
+import Profile from './pages/profile';
+import Footer from './components/footer';
 
-import Regression from './regression';
-import Distribution from './distribution';
-import DataPreprocessing from './dataPreprocessing';
-import Clusterization from './clusterization';
-import Correlation from './correlation';
+import Regression from './pages/regression';
+import Distribution from './pages/distribution';
+import DataPreprocessing from './pages/dataPreprocessing';
+import Clusterization from './pages/clusterization';
+import Correlation from './pages/correlation';
 
 
 function App() {

@@ -1,15 +1,15 @@
 import React from 'react';
 import '../css/operationTemplateComponent.css';
 import '../css/distribution.css';
-import MethodPanel from './methodPanel';
-import Header from "./header";
+import MethodPanel from '../components/methodPanel';
+import Header from "../components/header";
 import { getImage } from '../apis/imageApi';
-import ImagePlace from './imagePlace';
+import ImagePlace from '../components/imagePlace';
 import { postDistribution } from '../apis/taskApi';
 import InputData from '../inputData';
-import StringInput from './stringInput';
+import StringInput from '../components/stringInput';
 import OutputData from '../outputData';
-import StringOutput from './stringOutput';
+import StringOutput from '../components/stringOutput';
 
 interface DistributionData {
     image_name: string,

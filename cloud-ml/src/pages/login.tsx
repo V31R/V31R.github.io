@@ -1,18 +1,21 @@
 import React from "react";
 import '../css/button_default.css';
 import '../css/login.css';
-import HeaderCentral from "./headerCentral";
+import HeaderCentral from "../components/headerCentral";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import authContext from "../authContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
     const navigate:NavigateFunction = useNavigate();
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = React.useState<string>('');
+    const [password, setPassword] = React.useState<string>('');
+    const [isPressed, setPressed] =  React.useState<boolean>(false);
     const auth_context = React.useContext(authContext);
 
-    function HandleMouseEvent(){
+    function HandleMouseEvent(event: any){
+        event.preventDefault()
+        setPressed(true)
         if(email !== '' && password !== ''){
             navigate('/profile')
             auth_context!.setAuthenticated(true);
@@ -32,15 +35,15 @@ function Login() {
                         <div className="mb-4">
                             <div><label>Email</label></div>
                             <div><input type="email" className="w-100" name="email" required onChange={evt => setEmail(evt.target.value)} /></div>
-                            <div className="errors">Заполните "Email"</div>
+                            {(isPressed && email === '') && <div className="errors">Заполните "Email"</div>}
                         </div>
                         <div className="mb-4">
                             <div><label>Пароль</label></div>
                             <div><input type="password" className="w-100" name="password" required onChange={evt => setPassword(evt.target.value)} /></div>
-                            <div className="errors">Заполните "Пароль"</div>
+                            {(isPressed && password === '') && <div className="errors">Заполните "Пароль"</div>}
                         </div>
                         <div className="mb-4">
-                            <button type="submit" onClick={()=>HandleMouseEvent()} className="btn button-default btn-login">Войти</button>
+                            <button type="submit" onClick={(event)=>HandleMouseEvent(event)} className="btn button-default btn-login">Войти</button>
                         </div>
                     </form>
                 </section>

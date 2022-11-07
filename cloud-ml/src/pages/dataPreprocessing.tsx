@@ -1,34 +1,16 @@
 import React from 'react';
 import '../css/operationTemplateComponent.css';
-import '../css/regression.css';
-import MethodPanel from './methodPanel';
-import Header from "./header";
-import { getImage } from '../apis/imageApi';
-import ImagePlace from './imagePlace';
+import '../css/dataPreprocessing.css';
+import MethodPanel from '../components/methodPanel';
+import Header from "../components/header";
 
-interface RegressionData {
-    image_name: string,
-    names: string[]
-}
 
-function Regression() {
-    // eslint-disable-next-line
-    const [regerssionData, setRegressionData] = React.useState<RegressionData>({ image_name: "", names: [] });
+function DataPreprocessing() {
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
-    const [image, setImage] = React.useState<null | any>(null);
-    React.useEffect(() => {
-        if (regerssionData!.image_name === "") {
-            return;
-        }
-        console.log(regerssionData)
-        getImage(setImage, regerssionData!.image_name);
-    },
-        [regerssionData]
-    );
-    const handleSubmit = (event: any) => {
+
+    const handleSubmit=(event: any) =>{
         console.log(selectedFile)
     }
-
 
     const handleFileSelect = (event: any) => {
         if (event.target.files[0] !== undefined) {
@@ -45,7 +27,7 @@ function Regression() {
             <main className="container">
                 <div className="template-section">
                     <div>
-                        <h2>Регрессия</h2>
+                        <h2>Предварительная обработка данных</h2>
                     </div>
                 </div>
                 <section className="functions-list row mt-2 mb-3">
@@ -62,7 +44,6 @@ function Regression() {
                             <div className='template-title mb-1'>
                                 Результат
                             </div>
-                            <ImagePlace image={image} />
                         </div>
                     </div>
                 </section>
@@ -71,4 +52,4 @@ function Regression() {
     );
 }
 
-export default Regression;
+export default DataPreprocessing;

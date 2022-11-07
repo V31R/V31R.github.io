@@ -1,16 +1,34 @@
 import React from 'react';
 import '../css/operationTemplateComponent.css';
-import '../css/dataPreprocessing.css';
-import MethodPanel from './methodPanel';
-import Header from "./header";
+import '../css/regression.css';
+import MethodPanel from '../components/methodPanel';
+import Header from "../components/header";
+import { getImage } from '../apis/imageApi';
+import ImagePlace from '../components/imagePlace';
 
+interface RegressionData {
+    image_name: string,
+    names: string[]
+}
 
-function DataPreprocessing() {
+function Regression() {
+    // eslint-disable-next-line
+    const [regerssionData, setRegressionData] = React.useState<RegressionData>({ image_name: "", names: [] });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
-
-    const handleSubmit=(event: any) =>{
+    const [image, setImage] = React.useState<null | any>(null);
+    React.useEffect(() => {
+        if (regerssionData!.image_name === "") {
+            return;
+        }
+        console.log(regerssionData)
+        getImage(setImage, regerssionData!.image_name);
+    },
+        [regerssionData]
+    );
+    const handleSubmit = (event: any) => {
         console.log(selectedFile)
     }
+
 
     const handleFileSelect = (event: any) => {
         if (event.target.files[0] !== undefined) {
@@ -27,7 +45,7 @@ function DataPreprocessing() {
             <main className="container">
                 <div className="template-section">
                     <div>
-                        <h2>Предварительная обработка данных</h2>
+                        <h2>Регрессия</h2>
                     </div>
                 </div>
                 <section className="functions-list row mt-2 mb-3">
@@ -44,6 +62,7 @@ function DataPreprocessing() {
                             <div className='template-title mb-1'>
                                 Результат
                             </div>
+                            <ImagePlace image={image} />
                         </div>
                     </div>
                 </section>
@@ -52,4 +71,4 @@ function DataPreprocessing() {
     );
 }
 
-export default DataPreprocessing;
+export default Regression;

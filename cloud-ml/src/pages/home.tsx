@@ -1,8 +1,8 @@
 import React from 'react';
 import '../css/home.css';
 import operations from '../data_operations';
-import Header from './header';
-import OperationComponent from './operationComponent';
+import Header from '../components/header';
+import OperationComponent from '../components/operationComponent';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Home() {

@@ -1,11 +1,11 @@
 import React from 'react';
 import '../css/operationTemplateComponent.css';
 import '../css/correlation.css';
-import MethodPanel from './methodPanel';
-import Header from "./header";
-import ImagePlace from './imagePlace';
-import Matrix from './matrix';
-import StringInput from './stringInput';
+import MethodPanel from '../components/methodPanel';
+import Header from "../components/header";
+import ImagePlace from '../components/imagePlace';
+import Matrix from '../components/matrix';
+import StringInput from '../components/stringInput';
 import InputData from '../inputData';
 import { getImage } from '../apis/imageApi';
 import { postCorrelation } from '../apis/taskApi';
