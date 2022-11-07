@@ -44,7 +44,7 @@ class HandleCorrelation(HandlesTemplate):
         plt.close(fig)
         response: dict = dict()
         response['image_name'] = image_name
-        response['names'] = corr_matrix.columns
+        response['names'] = [_ for _ in corr_matrix.columns]
         response['values'] = []
         for i in range(0, len(corr_matrix)):
             for n in response['names']:

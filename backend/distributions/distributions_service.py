@@ -19,7 +19,7 @@ class DistributionsService(Singleton, Observer):
 
     def update(self, message: DistributionTemplate):
         print(f'Subscribed {message.get_name()}')
-        logging.getLogger('aiohttp.server').info(f'Subscribed {message.get_name()}')
+        logging.getLogger('distributions').info(f'Subscribed {message.get_name()}')
         self.distributions_array.append(message)
 
     async def __calculate__(self, index: int, data: pd.Series):
