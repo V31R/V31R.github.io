@@ -11,5 +11,7 @@ class BetaDistribution(DistributionTemplate):
 
     def calculate(self, data: pd.Series) -> None:
         a, b = 2.31, 0.627
-        self.distribution = np.linspace(stats.beta.ppf(0.01, a, b) * data.min(), stats.beta.ppf(0.99, a, b) * data.max(), len(data))
+        self.distribution = np.linspace(stats.beta.ppf(0.01, a, b), stats.beta.ppf(0.99, a, b), len(data))
+        rv = stats.beta(a, b)
+        self.distribution = rv.pdf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)

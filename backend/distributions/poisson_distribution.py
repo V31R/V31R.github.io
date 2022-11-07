@@ -11,5 +11,7 @@ class PoissonDistribution(DistributionTemplate):
 
     def calculate(self, data: pd.Series) -> None:
         mu = 0.5
-        self.distribution = np.linspace(stats.poisson.ppf(0.01, mu) * data.min(), stats.poisson.ppf(0.99, mu) * data.max(), len(data))
+        self.distribution = np.linspace(stats.poisson.ppf(0.01, mu), stats.poisson.ppf(0.99, mu), len(data))
+        rv = stats.poisson(mu)
+        self.distribution = rv.pmf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)

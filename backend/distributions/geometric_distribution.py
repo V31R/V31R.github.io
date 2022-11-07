@@ -11,5 +11,7 @@ class GeometricDistribution(DistributionTemplate):
 
     def calculate(self, data: pd.Series) -> None:
         p = 0.5
-        self.distribution = np.linspace(stats.bernoulli.ppf(0.01, p) * data.min(), stats.bernoulli.ppf(0.99, p) * data.max(), len(data))
+        self.distribution = np.linspace(stats.bernoulli.ppf(0.01, p), stats.bernoulli.ppf(0.99, p), len(data))
+        rv = stats.geom(p)
+        self.distribution = rv.pmf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)

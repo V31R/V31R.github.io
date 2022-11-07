@@ -11,5 +11,7 @@ class AlphaDistribution(DistributionTemplate):
 
     def calculate(self, data: pd.Series) -> None:
         a = 3.57
-        self.distribution = np.linspace(stats.alpha.ppf(0.01, a) * data.min(), stats.alpha.ppf(0.99, a) * data.max(), len(data))
+        self.distribution = np.linspace(stats.alpha.ppf(0.01, a), stats.alpha.ppf(0.99, a), len(data))
+        rv = stats.alpha(a)
+        self.distribution = rv.pdf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)

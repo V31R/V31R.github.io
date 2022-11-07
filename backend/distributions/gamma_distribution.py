@@ -11,5 +11,7 @@ class GammaDistribution(DistributionTemplate):
 
     def calculate(self, data: pd.Series) -> None:
         a = 1.99
-        self.distribution = np.linspace(stats.gamma.ppf(0.01, a) * data.min(), stats.gamma.ppf(0.99, a) * data.max(), len(data))
+        self.distribution = np.linspace(stats.gamma.ppf(0.01, a), stats.gamma.ppf(0.99, a), len(data))
+        rv = stats.gamma(a)
+        self.distribution = rv.pdf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)

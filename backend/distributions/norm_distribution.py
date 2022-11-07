@@ -10,5 +10,6 @@ class NormDistribution(DistributionTemplate):
         super(NormDistribution, self).__init__('Нормальное распределение')
 
     def calculate(self, data: pd.Series) -> None:
-        self.distribution = np.linspace(stats.norm.ppf(0.01) * data.min(), stats.norm.ppf(0.99) * data.max(), len(data))
+        self.distribution = np.linspace(stats.norm.ppf(0.01), stats.norm.ppf(0.99), len(data))
+        self.distribution = stats.norm.pdf(self.distribution)*(data.max()-data.min()) + data.min()
         self.__mse__(data)

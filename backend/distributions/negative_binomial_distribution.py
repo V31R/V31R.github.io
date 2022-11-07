@@ -13,4 +13,5 @@ class NegativeBinomialDistribution(DistributionTemplate):
         n = len(data)
         p = 0.5
         self.distribution = np.linspace(stats.nbinom.ppf(0.01, n, p), stats.nbinom.ppf(0.99, n, p), len(data))
+        rv = stats.nbinom(n, p)
         self.__mse__(data)

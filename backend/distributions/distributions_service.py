@@ -31,5 +31,7 @@ class DistributionsService(Singleton, Observer):
         for t in tasks:
             await t
         best: DistributionTemplate = min(self.distributions_array, key=lambda dist: dist.get_mse())
-        logging.getLogger('aiohttp.server').info(f'Best distribution: {best.get_name()}, MSE: {best.get_mse()}')
+        for dist in self.distributions_array:
+            logging.getLogger('distributions').info(f'Distribution "{dist.get_name()}", MSE: {dist.get_mse()}')
+        logging.getLogger('aiohttp.server').info(f'Best distribution: "{best.get_name()}", MSE: {best.get_mse()}')
         return best

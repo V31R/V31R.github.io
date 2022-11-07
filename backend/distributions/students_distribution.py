@@ -11,5 +11,7 @@ class StudentsDistribution(DistributionTemplate):
 
     def calculate(self, data: pd.Series) -> None:
         df = 2.74
-        self.distribution = np.linspace(stats.t.ppf(0.01, df) * data.min(), stats.t.ppf(0.99, df) * data.max(), len(data))
+        self.distribution = np.linspace(stats.t.ppf(0.01, df), stats.t.ppf(0.99, df), len(data))
+        rv = stats.t(df)
+        self.distribution = rv.pdf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)
