@@ -3,6 +3,7 @@ import Axios, { AxiosError } from "axios";
 const correlationPath: string = 'http://localhost:8080/correlation';
 const clusterizationPath: string = 'http://localhost:8080/clusterization';
 const distributionPath: string = 'http://localhost:8080/distribution';
+const regressionPath: string = 'http://localhost:8080/regression';
 
 function postToTask(path: string, resultHandler: (data: any) => void, formData: FormData, parameters: Object){
     Axios.post(path,
@@ -35,4 +36,9 @@ export function postClusterization(resultHandler: (data: any) => void, formData:
 
 export function postDistribution(resultHandler: (data: any) => void, formData: FormData, columnName: string | null) {
     postToTask(distributionPath, resultHandler, formData, { column_name: columnName } )
+}
+
+
+export function postRegression(resultHandler: (data: any) => void, formData: FormData, columnNameX: string | null, columnNameY: string | null) {
+    postToTask(regressionPath, resultHandler, formData, { column_x: columnNameX, column_y: columnNameY } )
 }

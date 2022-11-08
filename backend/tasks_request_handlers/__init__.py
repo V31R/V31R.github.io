@@ -1,0 +1,10 @@
+from tasks_request_handlers.clusterization import HandleClusterization
+from tasks_request_handlers.correlation import HandleCorrelation
+from tasks_request_handlers.distribution import HandleDistribution
+from tasks_request_handlers.regression import HandleRegression
+
+post_distribution_handler = HandleDistribution()
+post_regression_handler = HandleRegression()
+
+post_clusterization_handler = HandleClusterization()
+post_correlation_handler = HandleCorrelation()

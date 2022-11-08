@@ -51,5 +51,3 @@ class HandleCorrelation(HandlesTemplate):
                 response['values'].append(corr_matrix[n][i])
         return web.json_response(text=json.dumps(response))
 
-
-post_correlation_handler = HandleCorrelation()

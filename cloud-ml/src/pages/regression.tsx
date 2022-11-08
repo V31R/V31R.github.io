@@ -5,17 +5,25 @@ import MethodPanel from '../components/methodPanel';
 import Header from "../components/header";
 import { getImage } from '../apis/imageApi';
 import ImagePlace from '../components/imagePlace';
+import InputData from '../inputData';
+import OutputData from '../outputData';
+import StringOutput from '../components/stringOutput';
+import StringInput from '../components/stringInput';
+import { postRegression } from '../apis/taskApi';
 
 interface RegressionData {
     image_name: string,
-    names: string[]
+    name_x: string | null,
+    name_y: string | null
 }
 
 function Regression() {
     // eslint-disable-next-line
-    const [regerssionData, setRegressionData] = React.useState<RegressionData>({ image_name: "", names: [] });
+    const [regerssionData, setRegressionData] = React.useState<RegressionData>({ image_name: "", name_x: null, name_y: null });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
+    const [columnNameX, setColumnNameX] = React.useState<string | null>(null);
+    const [columnNameY, setColumnNameY] = React.useState<string | null>(null);
     React.useEffect(() => {
         if (regerssionData!.image_name === "") {
             return;
@@ -26,7 +34,16 @@ function Regression() {
         [regerssionData]
     );
     const handleSubmit = (event: any) => {
-        console.log(selectedFile)
+        event.preventDefault()
+        if (selectedFile == null) {
+            alert('Загрузите файл формата *.csv');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append(`${selectedFile.name}`, selectedFile);
+
+        postRegression(setRegressionData, formData, columnNameX, columnNameY);
     }
 
 
@@ -37,6 +54,47 @@ function Regression() {
         } else {
             setSelectedFile(null);
         }
+    }
+
+
+    const handleColumnName = (event: any) => {
+
+        if (event.target.name === 'column_name_x') {
+            setColumnNameX(event.target.value)
+        } else {
+            setColumnNameY(event.target.value)
+        }
+
+    }
+
+    const inputColumnNameX: InputData = {
+        mainLabel: 'Введите имя для столбца по оси X',
+        fieldName: 'column_name_x',
+        defaultValue: '',
+        tipLabel: 'Для недостающего столбца будет другой взят другой числовой столбец',
+        onChangeHandle: handleColumnName
+    };
+
+    const inputColumnNameY: InputData = {
+        mainLabel: 'Введите имя для столбца по оси Y',
+        fieldName: 'column_name_y',
+        defaultValue: '',
+        tipLabel: 'Для недостающего столбца будет другой взят другой числовой столбец',
+        onChangeHandle: handleColumnName
+    };
+
+    let outputColumnNameX: OutputData = {
+        mainLabel: 'Имя столбца по оси X',
+        defaultValue: 'Здесь будет имя столбца по оси X',
+        tipLabel: 'Если имя не было указано, то был выбран самый коррелирующий столбец',
+        value: null
+    }
+
+    let outputColumnNameY: OutputData = {
+        mainLabel: 'Имя столбца по оси Y',
+        defaultValue: 'Здесь будет имя столбца по оси Y',
+        tipLabel: 'Если имя не было указано, то был выбран самый коррелирующий столбец',
+        value: null
     }
 
     return (
@@ -55,6 +113,8 @@ function Regression() {
                                 Параметры
                             </div>
                             <MethodPanel onChange={handleFileSelect} onSend={handleSubmit} />
+                            <StringInput {...inputColumnNameX} />
+                            <StringInput {...inputColumnNameY} />
                         </div>
                     </div>
                     <div className="col-md-12 col-lg-6 mt-1">
@@ -63,6 +123,8 @@ function Regression() {
                                 Результат
                             </div>
                             <ImagePlace image={image} />
+                            <StringOutput {...outputColumnNameX} {...{ value: regerssionData.name_x }} />
+                            <StringOutput {...outputColumnNameY} {...{ value: regerssionData.name_y }} />
                         </div>
                     </div>
                 </section>

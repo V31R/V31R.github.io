@@ -7,7 +7,7 @@ import json
 from aiohttp import web, BodyPartReader
 
 from .handles_template import HandlesTemplate
-from utils import get_corr_matrix, get_only_numeric_columns
+from utils import get_corr_matrix, get_only_numeric_columns, get_the_most_corr_columns
 from images import image_base_path
 
 
@@ -35,15 +35,7 @@ class HandleClusterization(HandlesTemplate):
         clusters.fit_predict(df)
         corr_matrix = await get_corr_matrix(df)
         headers: list = corr_matrix.columns
-        i_max: int = 0
-        header_max: int = 1
-        for header in range(len(headers)):
-            i = header + 1
-            while i < len(corr_matrix):
-                if corr_matrix[headers[header]][i] > corr_matrix[headers[header_max]][i_max]:
-                    header_max = header
-                    i_max = i
-                i += 1
+        header_max, i_max = get_the_most_corr_columns(corr_matrix)
         logging.getLogger('aiohttp.server').info(
             f'The most correlated columns: {headers[header_max]} and {headers[i_max]}')
         df['clusters'] = clusters.labels_
@@ -72,5 +64,3 @@ class HandleClusterization(HandlesTemplate):
         response['columns_names'] = [n for n in headers]
         return web.json_response(text=json.dumps(response))
 
-
-post_clusterization_handler = HandleClusterization()

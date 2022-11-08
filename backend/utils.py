@@ -54,3 +54,16 @@ async def get_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
 def get_only_numeric_columns(df: pd.DataFrame) -> pd.DataFrame:
     only_numeric = df.select_dtypes(include=np.number)
     return only_numeric
+
+def get_the_most_corr_columns(corr_matrix: pd.DataFrame) -> list:
+    headers: list = corr_matrix.columns
+    i_max: int = 0
+    header_max: int = 1
+    for header in range(len(headers)):
+        i = header + 1
+        while i < len(corr_matrix):
+            if corr_matrix[headers[header]][i] > corr_matrix[headers[header_max]][i_max]:
+                header_max = header
+                i_max = i
+            i += 1
+    return [header_max, i_max]

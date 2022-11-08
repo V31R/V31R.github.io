@@ -54,5 +54,3 @@ class HandleDistribution(HandlesTemplate):
 
         return web.json_response(text=json.dumps(response))
 
-
-post_distribution_handler = HandleDistribution()
