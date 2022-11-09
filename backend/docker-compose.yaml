@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  aiohttp_cloud_ml_server:
+    build: ./
+    container_name: aiohttp_cloud_ml_server
+    environment:
+      # Позволяет отслеживать процесс работы приложения в командной строке
+      - PYTHONUNBUFFERED=True
+      # Порт внутри контейнера
+      - SERVER_PORT=5000
+    restart: on-failure
+    volumes:
+      - data:/data
+    ports:
+      - "8080:5000"
+
+volumes:
+  data:
