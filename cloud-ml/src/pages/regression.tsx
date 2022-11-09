@@ -10,6 +10,7 @@ import OutputData from '../outputData';
 import StringOutput from '../components/stringOutput';
 import StringInput from '../components/stringInput';
 import { postRegression } from '../apis/taskApi';
+import NumberInput from '../components/numberInput';
 
 interface RegressionData {
     image_name: string,
@@ -24,6 +25,7 @@ function Regression() {
     const [image, setImage] = React.useState<null | any>(null);
     const [columnNameX, setColumnNameX] = React.useState<string | null>(null);
     const [columnNameY, setColumnNameY] = React.useState<string | null>(null);
+    const [polynomialOrder, setPolynomialOrder] = React.useState<number>(1);
     React.useEffect(() => {
         if (regerssionData!.image_name === "") {
             return;
@@ -40,10 +42,15 @@ function Regression() {
             return;
         }
 
+        if(polynomialOrder <= 0){
+            alert('Степень полинома должна быть >=1');
+            return;
+        }
+
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postRegression(setRegressionData, formData, columnNameX, columnNameY);
+        postRegression(setRegressionData, formData, polynomialOrder, columnNameX, columnNameY);
     }
 
 
@@ -58,7 +65,7 @@ function Regression() {
 
 
     const handleColumnName = (event: any) => {
-
+        event.preventDefault()
         if (event.target.name === 'column_name_x') {
             setColumnNameX(event.target.value)
         } else {
@@ -66,6 +73,21 @@ function Regression() {
         }
 
     }
+
+    const handlePolynomialOrder = (event: any) => {
+        event.preventDefault()
+        setPolynomialOrder(event.target.value);
+    }
+
+    const inputPolynomialOrder: InputData = {
+        mainLabel: 'Введите степень полинома',
+        fieldName: 'poly_order',
+        defaultValue: '1',
+        min: "1",
+        tipLabel: 'Степень полинома влияет на характер регрессии',
+        tipLabelLink: 'https://machinelearningmastery.ru/polynomial-regression-bbe8b9d97491/',
+        onChangeHandle: handlePolynomialOrder
+    };
 
     const inputColumnNameX: InputData = {
         mainLabel: 'Введите имя для столбца по оси X',
@@ -113,6 +135,7 @@ function Regression() {
                                 Параметры
                             </div>
                             <MethodPanel onChange={handleFileSelect} onSend={handleSubmit} />
+                            <NumberInput {...inputPolynomialOrder} />
                             <StringInput {...inputColumnNameX} />
                             <StringInput {...inputColumnNameY} />
                         </div>

@@ -15,12 +15,16 @@ class HandleRegression(HandlesTemplate):
 
     def __init__(self):
         super().__init__()
-        self.clusters_num: int = 1
-        self.is_draw_clusters_centers: bool = False
+        self.order: int = 1
         self.column_x: str = ''
         self.column_y: str = ''
 
     async def check_parameters(self, request: web.Request) -> tuple:
+        self.order = 1
+        if request.rel_url.query.get('order') is None:
+            return False, web.Response(status=400, text='Не задана степень полинома')
+        self.order: int = int(request.rel_url.query.get('order'))
+
         self.column_x = ''
         self.column_y = ''
         if request.rel_url.query.get('column_x'):
@@ -87,7 +91,8 @@ class HandleRegression(HandlesTemplate):
 
         image_name = f"{field.name[:field.name.find('.csv')]}_regression.png"
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
-        sbn.regplot(x=column_name_x, y=column_name_y, data=df, ax=ax, order=2, line_kws={"color": "#8f39eb"})
+        sbn.regplot(x=column_name_x, y=column_name_y, data=df, ax=ax, order=self.order, truncate=True,
+                    line_kws={"color": "#8f39eb"}, scatter_kws={'color':'#a766ed'})
         fig.savefig(image_base_path + image_name)
         plt.close(fig)
 

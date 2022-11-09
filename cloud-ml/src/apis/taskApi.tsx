@@ -39,6 +39,6 @@ export function postDistribution(resultHandler: (data: any) => void, formData: F
 }
 
 
-export function postRegression(resultHandler: (data: any) => void, formData: FormData, columnNameX: string | null, columnNameY: string | null) {
-    postToTask(regressionPath, resultHandler, formData, { column_x: columnNameX, column_y: columnNameY } )
+export function postRegression(resultHandler: (data: any) => void, formData: FormData, polynomialOrder: number, columnNameX: string | null, columnNameY: string | null) {
+    postToTask(regressionPath, resultHandler, formData, { order: polynomialOrder, column_x: columnNameX, column_y: columnNameY } )
 }
