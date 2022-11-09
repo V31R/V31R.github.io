@@ -1,9 +1,5 @@
 import logging
 import pandas as pd
-import math
-import numpy as np
-from numpy import mean
-from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sbn
 import json
@@ -11,11 +7,10 @@ from aiohttp import web, BodyPartReader
 
 import distributions
 from distributions.distribution_template import DistributionTemplate
-from patterns.singleton import Singleton
+
 from .handles_template import HandlesTemplate
 from images import image_base_path
 from utils import get_only_numeric_columns
-colors = ["#eae3f1", "#8f39eb"]
 
 class HandleDistribution(HandlesTemplate):
 
@@ -38,7 +33,7 @@ class HandleDistribution(HandlesTemplate):
         best_distribution: DistributionTemplate = await distributions.DistributionsService().calculate_distributions(df)
 
         to_draw = pd.DataFrame()
-        to_draw[df.name]= df
+        to_draw[df.name] = df
 
         to_draw[best_distribution.get_name()] = best_distribution.get_distribution()
 

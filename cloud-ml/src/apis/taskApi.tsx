@@ -4,6 +4,7 @@ const correlationPath: string = 'http://localhost:8080/correlation';
 const clusterizationPath: string = 'http://localhost:8080/clusterization';
 const distributionPath: string = 'http://localhost:8080/distribution';
 const regressionPath: string = 'http://localhost:8080/regression';
+const preprocessingPath: string = 'http://localhost:8080/preprocessing';
 
 function postToTask(path: string, resultHandler: (data: any) => void, formData: FormData, parameters: Object){
     Axios.post(path,
@@ -41,4 +42,25 @@ export function postDistribution(resultHandler: (data: any) => void, formData: F
 
 export function postRegression(resultHandler: (data: any) => void, formData: FormData, polynomialOrder: number, columnNameX: string | null, columnNameY: string | null) {
     postToTask(regressionPath, resultHandler, formData, { order: polynomialOrder, column_x: columnNameX, column_y: columnNameY } )
+}
+
+
+export function postPreprocessing(resultHandler: (data: any) => void, formData: FormData){
+    Axios.post(preprocessingPath,
+        formData,
+        { 
+
+            headers: { "Content-Type": "multipart/form-data" }, responseType: "blob"
+        }
+    ).then
+    (response => {
+        let data: Blob = new Blob([response.data], {
+            type: 'text/csv'
+          });
+        let csvURL: string = window.URL.createObjectURL(data);
+        resultHandler(csvURL);
+    })
+    .catch((error: AxiosError) => {
+        alert(`${error.response!.status} ${error.response!.data}.`);
+    });
 }
