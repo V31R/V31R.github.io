@@ -4,8 +4,8 @@ import logging
 import pandas as pd
 
 from .distribution_template import DistributionTemplate
-from server.patterns.observer import Observer
-from server.patterns.singleton import Singleton
+from patterns.observer import Observer
+from patterns.singleton import Singleton
 
 
 class DistributionsService(Singleton, Observer):

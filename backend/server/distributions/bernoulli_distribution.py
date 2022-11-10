@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from server.distributions.distribution_template import DistributionTemplate
+from distributions.distribution_template import DistributionTemplate
 
 
 class BernoulliDistribution(DistributionTemplate):

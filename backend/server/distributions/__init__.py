@@ -1,15 +1,15 @@
 import logging
 
-from server.distributions.alpha_distribution import AlphaDistribution
-from server.distributions.beta_distribution import BetaDistribution
-from server.distributions.distribution_template import DistributionTemplate
-from server.distributions.distributions_service import DistributionsService
-from server.distributions.exponential_distribution import ExponentialDistribution
-from server.distributions.gamma_distribution import GammaDistribution
-from server.distributions.lognorm_distribution import LognormDistribution
-from server.distributions.norm_distribution import NormDistribution
-from server.distributions.students_distribution import StudentsDistribution
-from server.distributions.uniform_distribution import UniformDistribution
+from distributions.alpha_distribution import AlphaDistribution
+from distributions.beta_distribution import BetaDistribution
+from distributions.distribution_template import DistributionTemplate
+from distributions.distributions_service import DistributionsService
+from distributions.exponential_distribution import ExponentialDistribution
+from distributions.gamma_distribution import GammaDistribution
+from distributions.lognorm_distribution import LognormDistribution
+from distributions.norm_distribution import NormDistribution
+from distributions.students_distribution import StudentsDistribution
+from distributions.uniform_distribution import UniformDistribution
 
 logging.getLogger('distributions').setLevel(level=logging.DEBUG)
 

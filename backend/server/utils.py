@@ -6,7 +6,9 @@ from chardet.universaldetector import UniversalDetector
 import os
 import csv
 
-csv_base_path = './csv/'
+
+
+csv_base_path = f"{os.environ.get('BASE_PATH')}/csv/"
 
 
 async def find_delimiter(path) -> str:

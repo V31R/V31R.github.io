@@ -7,8 +7,8 @@ import json
 from aiohttp import web, BodyPartReader
 
 from .handles_template import HandlesTemplate
-from server.images import image_base_path
-from server.utils import get_corr_matrix
+from images import image_base_path
+from utils import get_corr_matrix
 
 colors = ["#eae3f1", "#8f39eb"]
 cmap_name = 'purples_haze'

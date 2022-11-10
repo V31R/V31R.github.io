@@ -3,7 +3,7 @@ import re
 import pandas as pd
 from aiohttp import web, BodyPartReader
 
-from server.utils import get_df_from_io
+from utils import get_df_from_io
 
 class HandlesTemplate:
 

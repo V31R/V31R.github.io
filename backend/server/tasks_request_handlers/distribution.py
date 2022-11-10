@@ -5,12 +5,12 @@ import seaborn as sbn
 import json
 from aiohttp import web, BodyPartReader
 
-from .. import distributions
-from server.distributions.distribution_template import DistributionTemplate
+import distributions
+from distributions.distribution_template import DistributionTemplate
 
 from .handles_template import HandlesTemplate
-from server.images import image_base_path
-from server.utils import get_only_numeric_columns
+from images import image_base_path
+from utils import get_only_numeric_columns
 
 class HandleDistribution(HandlesTemplate):
 
