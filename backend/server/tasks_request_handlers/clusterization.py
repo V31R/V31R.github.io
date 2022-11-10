@@ -8,13 +8,13 @@ from aiohttp import web, BodyPartReader
 
 from .handles_template import HandlesTemplate
 from utils import get_corr_matrix, get_only_numeric_columns, get_the_most_corr_columns
-from images import image_base_path
+from images import save_figure_image
 
 
 class HandleClusterization(HandlesTemplate):
 
     def __init__(self):
-        super().__init__()
+        super().__init__('clusterization')
         self.clusters_num: int = 1
         self.is_draw_clusters_centers: bool = False
 
@@ -40,7 +40,6 @@ class HandleClusterization(HandlesTemplate):
             f'The most correlated columns: {headers[header_max]} and {headers[i_max]}')
         df['clusters'] = clusters.labels_
 
-        image_name = f"{field.name[:field.name.find('.csv')]}_clusterization.png"
         palette = sbn.color_palette("hls", self.clusters_num)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
         sbn.scatterplot(x=headers[header_max], y=headers[i_max], hue='clusters', ax=ax,
@@ -54,8 +53,8 @@ class HandleClusterization(HandlesTemplate):
             centers_df['clusters'] = [n for n in range(self.clusters_num)]
             sbn.scatterplot(x=headers[header_max], y=headers[i_max], hue='clusters', ax=ax, marker="X", s=150,
                             palette=palette, data=centers_df, legend=False)
-        fig.savefig(image_base_path + image_name)
-        plt.close(fig)
+
+        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
 
         response: dict = dict()
         response['image_name'] = image_name

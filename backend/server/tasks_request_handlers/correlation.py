@@ -7,8 +7,9 @@ import json
 from aiohttp import web, BodyPartReader
 
 from .handles_template import HandlesTemplate
-from images import image_base_path
 from utils import get_corr_matrix
+
+from images import save_figure_image
 
 colors = ["#eae3f1", "#8f39eb"]
 cmap_name = 'purples_haze'
@@ -18,7 +19,7 @@ purples_haze_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
 class HandleCorrelation(HandlesTemplate):
 
     def __init__(self):
-        super().__init__()
+        super().__init__('correlation')
         self.colormap = purples_haze_cmap
 
     async def check_parameters(self, request: web.Request) -> tuple:
@@ -39,9 +40,7 @@ class HandleCorrelation(HandlesTemplate):
         corr_matrix: pd.DataFrame = await get_corr_matrix(self.df)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
         sbn.heatmap(corr_matrix, annot=True, axes=ax, cmap=self.colormap)
-        image_name = f"{field.name[:field.name.find('.csv')]}_correlation.png"
-        fig.savefig(image_base_path + image_name)
-        plt.close(fig)
+        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
         response: dict = dict()
         response['image_name'] = image_name
         response['names'] = [_ for _ in corr_matrix.columns]

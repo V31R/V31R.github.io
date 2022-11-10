@@ -6,10 +6,10 @@ from chardet.universaldetector import UniversalDetector
 import os
 import csv
 
-
+from auth import anonymous_user
 
 csv_base_path = f"{os.environ.get('BASE_PATH')}/csv/"
-
+temp_csv_base_path = f"{os.environ.get('BASE_PATH')}/temp_csv/"
 
 async def find_delimiter(path) -> str:
     sniffer = csv.Sniffer()
@@ -18,14 +18,17 @@ async def find_delimiter(path) -> str:
     return delimiter
 
 
-async def get_df_from_io(input_data: bytearray, filename: str) -> pd.DataFrame:
+async def get_df_from_io(input_data: bytearray, filename: str, user: str) -> tuple:
     logging.getLogger('aiohttp.server').info(f'Analyze {filename} encoding')
     temp_filename = datetime.now().strftime("%Y%m%d%H%M%S") + filename
-    file = open(csv_base_path + temp_filename, 'wb')
+    path = temp_csv_base_path
+    if user != anonymous_user:
+        path = csv_base_path
+    file = open(path + temp_filename, 'wb')
     file.write(input_data)
     file.close()
     detector = UniversalDetector()
-    for line in open(csv_base_path + temp_filename, 'rb'):
+    for line in open(path + temp_filename, 'rb'):
         detector.feed(line)
         if detector.done:
             break
@@ -34,19 +37,19 @@ async def get_df_from_io(input_data: bytearray, filename: str) -> pd.DataFrame:
     if detector.result.get('encoding') is None:
         raise Exception('Unknown encoding')
     logging.getLogger('aiohttp.server').info(f'Start save {filename}')
-    output_file = open(csv_base_path + filename, 'wb')
-    for line in open(csv_base_path + temp_filename, 'rb'):
+    output_file = open(path + filename, 'wb')
+    for line in open(path + temp_filename, 'rb'):
         text = line.decode(detector.result['encoding'])
         text = text.encode("utf-8")
         output_file.write(text)
     output_file.close()
     logging.getLogger('aiohttp.server').info(f'Saved {filename}')
-    os.remove(csv_base_path + temp_filename)
-    delimiter: str = await find_delimiter(csv_base_path + filename)
+    os.remove(path + temp_filename)
+    delimiter: str = await find_delimiter(path + filename)
     logging.getLogger('aiohttp.server').info(f'Info about {filename} delimiter = "{delimiter}"')
-    df: pd.DataFrame = pd.read_csv(csv_base_path + filename, sep=delimiter)
+    df: pd.DataFrame = pd.read_csv(path + filename, sep=delimiter)
     logging.getLogger('aiohttp.server').info(f'Loaded {filename} to DataFrame')
-    return df
+    return df, filename
 
 
 async def get_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:

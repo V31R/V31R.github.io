@@ -9,13 +9,13 @@ import distributions
 from distributions.distribution_template import DistributionTemplate
 
 from .handles_template import HandlesTemplate
-from images import image_base_path
+from images import save_figure_image
 from utils import get_only_numeric_columns
 
 class HandleDistribution(HandlesTemplate):
 
     def __init__(self):
-        super().__init__()
+        super().__init__('distribution')
 
     async def work_with_df(self, request: web.Request, field: BodyPartReader) -> web.Response:
         df: pd.DataFrame = get_only_numeric_columns(self.df)
@@ -27,8 +27,6 @@ class HandleDistribution(HandlesTemplate):
         elif len(df.columns) > 1:
             logging.getLogger('aiohttp.server').info(f'Got {df.columns} choose first from them')
             df = df[df.columns[0]]
-        image_name = f"{field.name[:field.name.find('.csv')]}_distribution.png"
-
 
         best_distribution: DistributionTemplate = await distributions.DistributionsService().calculate_distributions(df)
 
@@ -39,8 +37,8 @@ class HandleDistribution(HandlesTemplate):
 
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
         sbn.histplot(to_draw,kde=True, ax=ax)
-        fig.savefig(image_base_path + image_name)
-        plt.close(fig)
+
+        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
 
         response: dict = dict()
         response['image_name'] = image_name
