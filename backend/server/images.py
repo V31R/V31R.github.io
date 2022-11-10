@@ -3,14 +3,17 @@ import os
 from aiohttp import web
 import  matplotlib.pyplot as plt
 
-image_base_path = f"{os.environ.get('BASE_PATH')}/images/"
-temp_image_base_path = f"{os.environ.get('BASE_PATH')}/temp_images/"
+image_dir = "images"
+temp_image_dir = "temp_images"
 
-from auth import anonymous_user
+image_base_path = f"{os.environ.get('BASE_PATH')}/{image_dir}/"
+temp_image_base_path = f"{os.environ.get('BASE_PATH')}/{temp_image_dir}/"
 
-async def handleImageGet(request):
+from auth import anonymous_user, check_user
+
+async def get_image_handle(request):
     image_name = request.match_info.get('image_name', 'error')
-    user = request.rel_url.query.get('user', anonymous_user)
+    user = check_user(request.rel_url.query.get('user', anonymous_user))
     logging.getLogger('aiohttp.server').info(f'Response by {user}')
     if user == anonymous_user:
         if not (image_name in os.listdir(temp_image_base_path)):

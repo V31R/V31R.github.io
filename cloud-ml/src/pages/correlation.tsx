@@ -25,8 +25,11 @@ function Correlation() {
         if (correlationData!.image_name === "") {
                 return;
         }
-        console.log(correlationData)
-        getImage( setImage, correlationData!.image_name);
+        const get_image = async () => {
+            const image = await getImage(correlationData!.image_name, localStorage.getItem('user'));
+            setImage(image)
+        }
+        get_image()
     },
         [correlationData]
     );
@@ -41,7 +44,7 @@ function Correlation() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postCorrelation(setCorrelationData, formData, colorMap);
+        postCorrelation(setCorrelationData, formData, localStorage.getItem('user'), colorMap);
 
     }
 
@@ -55,7 +58,7 @@ function Correlation() {
     }
 
     const handleColorMap = (event: any) => {
-        setColorMap(event.target.value)
+        setColorMap(event.target.value.trim())
     }
 
     const inputColormap: InputData = {

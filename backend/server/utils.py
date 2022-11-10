@@ -8,8 +8,11 @@ import csv
 
 from auth import anonymous_user
 
-csv_base_path = f"{os.environ.get('BASE_PATH')}/csv/"
-temp_csv_base_path = f"{os.environ.get('BASE_PATH')}/temp_csv/"
+csv_dir = "csv"
+temp_csv_dir = "temp_csv"
+
+csv_base_path = f"{os.environ.get('BASE_PATH')}/{csv_dir}/"
+temp_csv_base_path = f"{os.environ.get('BASE_PATH')}/{temp_csv_dir}/"
 
 async def find_delimiter(path) -> str:
     sniffer = csv.Sniffer()

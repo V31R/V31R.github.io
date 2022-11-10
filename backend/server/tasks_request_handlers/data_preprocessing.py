@@ -1,7 +1,9 @@
 import pandas as pd
 from aiohttp import web, BodyPartReader
 from .handles_template import HandlesTemplate
-from utils import csv_base_path
+from utils import csv_base_path, temp_csv_base_path
+
+from auth import anonymous_user
 
 
 class HandlePreprocessing(HandlesTemplate):
@@ -15,8 +17,11 @@ class HandlePreprocessing(HandlesTemplate):
         df = df.dropna(axis=0)
         df = pd.get_dummies(df)
         filename = f'{self.task_name}_' + field.name
-        df.to_csv(csv_base_path + filename, index=False, encoding='utf-8')
-        file = open(csv_base_path + filename, encoding='utf-8')
+        path = temp_csv_base_path
+        if self.user != anonymous_user:
+            path = csv_base_path
+        df.to_csv(path + filename, index=False, encoding='utf-8')
+        file = open(path + filename, encoding='utf-8')
         repsonse = web.Response(body=file.read())
         return repsonse
 

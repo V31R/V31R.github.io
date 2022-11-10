@@ -3,7 +3,8 @@ import logging
 from aiohttp import web
 import aiohttp_cors
 import aiopg
-from images import handleImageGet
+from images import get_image_handle
+from auth import get_authentication_handle, post_registration_handle
 from tasks_request_handlers import post_distribution_handler, post_regression_handler, post_clusterization_handler, \
     post_correlation_handler, post_preprocessing_handler
 
@@ -16,7 +17,9 @@ app.add_routes([
     web.post('/preprocessing', post_preprocessing_handler),
     web.post('/clusterization', post_clusterization_handler),
     web.post('/correlation', post_correlation_handler),
-    web.get('/images/{image_name}', handleImageGet)
+    web.get('/images/{image_name}', get_image_handle),
+    web.get('/authentication', get_authentication_handle),
+    web.post('/authentication', post_registration_handle)
 ])
 
 cors = aiohttp_cors.setup(app, defaults={

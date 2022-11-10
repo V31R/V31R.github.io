@@ -21,7 +21,7 @@ function DataPreprocessing() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postPreprocessing(setCsvUrl, formData);
+        postPreprocessing(setCsvUrl, formData, localStorage.getItem('user'));
     }
 
     const handleFileSelect = (event: any) => {

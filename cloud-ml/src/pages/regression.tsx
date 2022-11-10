@@ -19,7 +19,6 @@ interface RegressionData {
 }
 
 function Regression() {
-    // eslint-disable-next-line
     const [regerssionData, setRegressionData] = React.useState<RegressionData>({ image_name: "", name_x: null, name_y: null });
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
@@ -30,8 +29,11 @@ function Regression() {
         if (regerssionData!.image_name === "") {
             return;
         }
-        console.log(regerssionData)
-        getImage(setImage, regerssionData!.image_name);
+        const get_image = async () => {
+            const image = await getImage(regerssionData!.image_name, localStorage.getItem('user'));
+            setImage(image)
+        }
+        get_image()
     },
         [regerssionData]
     );
@@ -50,7 +52,7 @@ function Regression() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postRegression(setRegressionData, formData, polynomialOrder, columnNameX, columnNameY);
+        postRegression(setRegressionData, formData, localStorage.getItem('user'), polynomialOrder, columnNameX, columnNameY);
     }
 
 
@@ -67,9 +69,9 @@ function Regression() {
     const handleColumnName = (event: any) => {
         event.preventDefault()
         if (event.target.name === 'column_name_x') {
-            setColumnNameX(event.target.value)
+            setColumnNameX(event.target.value.trim())
         } else {
-            setColumnNameY(event.target.value)
+            setColumnNameY(event.target.value.trim())
         }
 
     }

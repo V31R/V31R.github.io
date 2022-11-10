@@ -1,18 +1,21 @@
-import Axios, {AxiosError} from 'axios';
+import Axios, { AxiosError } from 'axios';
 
-const imageBasePath:string = 'http://localhost:8080/images';
+const imageBasePath: string = 'http://localhost:8080/images';
 
-export function getImage(resultHandler: (data: any)=>void, imageName: string){
+export async function getImage(imageName: string, user: string | null) {
 
-    Axios.get(`${imageBasePath}/${imageName}`,
-        { responseType: 'arraybuffer' }
+    return Axios.get(`${imageBasePath}/${imageName}`,
+        {
+            params: { user: user },
+            responseType: 'arraybuffer'
+        }
     ).then
-    (response => {
-        let base64ImageString: string = Buffer.from(response.data, 'binary').toString('base64');
-        resultHandler("data:image/png;base64," + base64ImageString);
-    })
-    .catch((error: AxiosError) => {
-        alert(error.message);
-    });
+        (response => {
+            let base64ImageString: string = Buffer.from(response.data, 'binary').toString('base64');
+            return "data:image/png;base64," + base64ImageString;
+        })
+        .catch((error: AxiosError) => {
+            alert(error.message);
+        });
 
 }

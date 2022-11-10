@@ -35,7 +35,12 @@ function Clusterization() {
         if (clusterizationData!.image_name === "") {
             return;
         }
-        getImage( setImage, clusterizationData!.image_name);
+
+        const get_image = async () => {
+            const image = await getImage(clusterizationData!.image_name, localStorage.getItem('user'));
+            setImage(image)
+        }
+        get_image()
     },
         [clusterizationData]
     );
@@ -54,7 +59,7 @@ function Clusterization() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postClusterization(setClusterizationData, formData, clustersNumber, withCenters);
+        postClusterization(setClusterizationData, formData, localStorage.getItem('user'), clustersNumber, withCenters);
     }
 
     const handleFileSelect = (event: any) => {

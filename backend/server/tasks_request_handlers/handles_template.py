@@ -7,6 +7,8 @@ from utils import get_df_from_io
 
 from auth import anonymous_user
 
+from auth import check_user
+
 
 class HandlesTemplate:
 
@@ -19,12 +21,13 @@ class HandlesTemplate:
     async def __call__(self, request: web.Request) -> web.Response:
         if request.headers.get('Content-type').find("multipart") == -1:
             return web.Response(status=400, text='Недопустимый Content-type')
-        self.user = request.rel_url.query.get('user', anonymous_user)
+        self.user = check_user(request.rel_url.query.get('user', anonymous_user))
+
         is_checked, response = await self.check_parameters(request)
 
         if not is_checked:
             return response
-        logging.getLogger('aiohttp.server').info(f'Response by {self.user}')
+        logging.getLogger('aiohttp.server').info(f"Response by '{self.user}'")
         pattern = r".*\.csv$"
         async for field in (await request.multipart()):
             logging.getLogger('aiohttp.server').info(f'Get file - {field.name}')

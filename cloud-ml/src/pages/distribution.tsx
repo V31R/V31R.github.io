@@ -18,7 +18,6 @@ interface DistributionData {
 }
 
 function Distribution() {
-    // eslint-disable-next-line
     const [distributionData, setDistributionData] = React.useState<DistributionData>({ image_name: "", name: null , distribution_type: null});
     const [selectedFile, setSelectedFile] = React.useState<null | any>(null);
     const [image, setImage] = React.useState<null | any>(null);
@@ -27,8 +26,11 @@ function Distribution() {
         if (distributionData!.image_name === "") {
                 return;
         }
-        console.log(distributionData)
-        getImage( setImage, distributionData!.image_name);
+        const get_image = async () => {
+            const image = await getImage(distributionData!.image_name, localStorage.getItem('user'));
+            setImage(image)
+        }
+        get_image()
     },
         [distributionData]
     );
@@ -42,7 +44,7 @@ function Distribution() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postDistribution(setDistributionData, formData, columnName);
+        postDistribution(setDistributionData, formData, localStorage.getItem('user'), columnName);
     }
 
     const handleFileSelect = (event: any) => {
@@ -55,7 +57,7 @@ function Distribution() {
     }
 
     const handleColumnName = (event: any) => {
-        setColumnName(event.target.value)
+        setColumnName(event.target.value.trim())
     }
 
     const inputColumnName: InputData = {
