@@ -2,16 +2,16 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from distributions.distribution_template import DistributionTemplate
+from server.distributions.distribution_template import DistributionTemplate
 
 
-class BernoulliDistribution(DistributionTemplate):
+class GeometricDistribution(DistributionTemplate):
     def __init__(self):
-        super(BernoulliDistribution, self).__init__('Распределение Бернулли')
+        super(GeometricDistribution, self).__init__('Геометрическое распределение')
 
     def calculate(self, data: pd.Series) -> None:
         p = 0.5
         self.distribution = np.linspace(stats.bernoulli.ppf(0.01, p), stats.bernoulli.ppf(0.99, p), len(data))
-        rv = stats.bernoulli(p)
+        rv = stats.geom(p)
         self.distribution = rv.pmf(self.distribution) * (data.max() - data.min()) + data.min()
         self.__mse__(data)

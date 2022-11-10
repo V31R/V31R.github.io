@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 
-from patterns.observer import Observable
+from server.patterns.observer import Observable
 
 
 class DistributionTemplate(Observable, metaclass=ABCMeta):

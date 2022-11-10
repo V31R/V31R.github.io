@@ -7,8 +7,8 @@ import json
 from aiohttp import web, BodyPartReader
 
 from .handles_template import HandlesTemplate
-from utils import get_corr_matrix, get_only_numeric_columns, get_the_most_corr_columns
-from images import image_base_path
+from server.utils import get_corr_matrix, get_only_numeric_columns, get_the_most_corr_columns
+from server.images import image_base_path
 
 
 class HandleClusterization(HandlesTemplate):

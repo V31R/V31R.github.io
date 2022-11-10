@@ -1,7 +1,7 @@
 import pandas as pd
 from aiohttp import web, BodyPartReader
 from .handles_template import HandlesTemplate
-from utils import csv_base_path
+from server.utils import csv_base_path
 
 
 class HandlePreprocessing(HandlesTemplate):

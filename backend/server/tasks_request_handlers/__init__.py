@@ -1,0 +1,11 @@
+from server.tasks_request_handlers.clusterization import HandleClusterization
+from server.tasks_request_handlers.correlation import HandleCorrelation
+from server.tasks_request_handlers.data_preprocessing import HandlePreprocessing
+from server.tasks_request_handlers.distribution import HandleDistribution
+from server.tasks_request_handlers.regression import HandleRegression
+
+post_distribution_handler = HandleDistribution()
+post_regression_handler = HandleRegression()
+post_preprocessing_handler = HandlePreprocessing()
+post_clusterization_handler = HandleClusterization()
+post_correlation_handler = HandleCorrelation()
