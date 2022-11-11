@@ -37,7 +37,7 @@ function Regression() {
     },
         [regerssionData]
     );
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async (event: any) => {
         event.preventDefault()
         if (selectedFile == null) {
             alert('Загрузите файл формата *.csv');
@@ -51,8 +51,12 @@ function Regression() {
 
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
+        const result: RegressionData | null = await postRegression(formData, localStorage.getItem('user'), polynomialOrder, columnNameX, columnNameY);
 
-        postRegression(setRegressionData, formData, localStorage.getItem('user'), polynomialOrder, columnNameX, columnNameY);
+        if (result !== null) {
+            setRegressionData((oldData: Object) => ({ ...oldData, ...result }))
+        }
+        
     }
 
 

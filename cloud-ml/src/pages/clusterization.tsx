@@ -45,7 +45,7 @@ function Clusterization() {
         [clusterizationData]
     );
 
-    const handleSubmit=(event: any) =>{
+    const handleSubmit = async (event: any) =>{
         event.preventDefault()
         if (selectedFile == null) {
             alert('Загрузите файл формата *.csv');
@@ -58,8 +58,12 @@ function Clusterization() {
 
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
+        const result: ClusterizationData | null = await postClusterization(formData, localStorage.getItem('user'), clustersNumber, withCenters);
+        
+        if(result !== null){
+            setClusterizationData((oldData: Object) => ({ ...oldData, ...result }))
+        }
 
-        postClusterization(setClusterizationData, formData, localStorage.getItem('user'), clustersNumber, withCenters);
     }
 
     const handleFileSelect = (event: any) => {

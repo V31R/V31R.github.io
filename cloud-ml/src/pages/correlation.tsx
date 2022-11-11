@@ -44,7 +44,11 @@ function Correlation() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        postCorrelation(setCorrelationData, formData, localStorage.getItem('user'), colorMap);
+        const result: CorrelationData | null = await postCorrelation(formData, localStorage.getItem('user'), colorMap);
+        
+        if(result !== null){
+            setCorrelationData((oldData: Object) => ({ ...oldData, ...result }))
+        }
 
     }
 

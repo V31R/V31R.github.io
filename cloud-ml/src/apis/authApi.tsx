@@ -4,7 +4,7 @@ const authenticationBasePath:string = 'http://localhost:8080/authentication';
 
 export function getAuth(resultHandler: (data: any)=>void, errorHandler: (data: any)=>void, login: string, password: string){
 
-    Axios.get(`${authenticationBasePath}`,
+    Axios.get(authenticationBasePath,
         {
             params: { login:login, password:password}, 
             responseType: 'json' 
@@ -22,7 +22,7 @@ export function getAuth(resultHandler: (data: any)=>void, errorHandler: (data: a
 
 export function postAuth(resultHandler: (data: any)=>void, errorHandler: (data: any)=>void, login: string, password: string){
 
-    Axios.post(`${authenticationBasePath}`,
+    Axios.post(authenticationBasePath,
         null,
         {
             params: { login:login, password:password }, 
