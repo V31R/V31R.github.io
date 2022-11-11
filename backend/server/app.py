@@ -2,7 +2,6 @@ import logging
 
 from aiohttp import web
 import aiohttp_cors
-import aiopg
 from images import get_image_handle
 from auth import get_authentication_handle, post_registration_handle
 from tasks_request_handlers import post_distribution_handler, post_regression_handler, post_clusterization_handler, \

@@ -6,9 +6,9 @@ import Header from "../components/header";
 import { getImage } from '../apis/imageApi';
 import ImagePlace from '../components/imagePlace';
 import { postDistribution } from '../apis/taskApi';
-import InputData from '../inputData';
+import InputData from '../models/inputData';
 import StringInput from '../components/stringInput';
-import OutputData from '../outputData';
+import OutputData from '../models/outputData';
 import StringOutput from '../components/stringOutput';
 
 interface DistributionData {

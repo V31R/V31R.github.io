@@ -6,7 +6,7 @@ import { useNavigate, NavigateFunction } from "react-router-dom";
 import authContext from "../authContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { postAuth } from "../apis/authApi";
-import { User } from "../user";
+import { User } from "../models/user";
 
 function Registration() {
     const navigate:NavigateFunction = useNavigate();

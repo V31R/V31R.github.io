@@ -1,4 +1,4 @@
-import OperationHistory from "../operationHistory";
+import OperationHistory from "../models/operationHistory";
 
 function OperationHistoryComponent(props: OperationHistory){
     return (

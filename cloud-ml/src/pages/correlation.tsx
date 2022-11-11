@@ -6,7 +6,7 @@ import Header from "../components/header";
 import ImagePlace from '../components/imagePlace';
 import Matrix from '../components/matrix';
 import StringInput from '../components/stringInput';
-import InputData from '../inputData';
+import InputData from '../models/inputData';
 import { getImage } from '../apis/imageApi';
 import { postCorrelation } from '../apis/taskApi';
 

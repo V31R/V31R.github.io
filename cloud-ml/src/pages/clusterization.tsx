@@ -6,9 +6,9 @@ import Header from "../components/header";
 import CheckBox, {CheckBoxData} from '../components/checkBox';
 import ImagePlace from '../components/imagePlace';
 import NumberInput from '../components/numberInput';
-import InputData from '../inputData';
+import InputData from '../models/inputData';
 import StringOutput from '../components/stringOutput';
-import OutputData from '../outputData';
+import OutputData from '../models/outputData';
 import { getImage } from '../apis/imageApi';
 import { postClusterization } from '../apis/taskApi';
 

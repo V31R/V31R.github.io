@@ -2,13 +2,15 @@ import logging
 import re
 import pandas as pd
 from aiohttp import web, BodyPartReader
+from sqlalchemy.sql import select
 
 from utils import get_df_from_io
 
 from auth import anonymous_user
-
 from auth import check_user
 
+from models import task_table
+from database_api import select_from_table
 
 class HandlesTemplate:
 
@@ -16,9 +18,16 @@ class HandlesTemplate:
         self.df: pd.DataFrame = None
         self.user: str = anonymous_user
         self.task_name: str = task_name
+        self.task_id: str = ''
         self.data_filename: str = ''
 
     async def __call__(self, request: web.Request) -> web.Response:
+
+        if self.task_id == '':
+            result = select_from_table(select(task_table.c.id).where(task_table.c.inner_name == self.task_name))
+            self.task_id = [_ for _ in result][0][0]
+            logging.getLogger('aiohttp.server').info(f"Task id '{self.task_id}'")
+
         if request.headers.get('Content-type').find("multipart") == -1:
             return web.Response(status=400, text='Недопустимый Content-type')
         self.user = check_user(request.rel_url.query.get('user', anonymous_user))

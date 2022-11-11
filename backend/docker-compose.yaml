@@ -4,6 +4,8 @@ services:
   aiohttp_cloud_ml_server:
     build: ./server
     container_name: aiohttp_cloud_ml_server
+    depends_on:
+      - postgres_db
     env_file:
       - .env
     restart: on-failure

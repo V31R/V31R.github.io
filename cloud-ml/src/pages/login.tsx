@@ -5,7 +5,7 @@ import HeaderCentral from "../components/headerCentral";
 import { useNavigate, NavigateFunction, Link } from "react-router-dom";
 import authContext from "../authContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { User } from "../user";
+import { User } from "../models/user";
 import { getAuth } from "../apis/authApi";
 
 function Login() {
