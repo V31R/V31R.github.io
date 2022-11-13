@@ -1,15 +1,14 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # files type
-backend/csv/*
-backend/images/*
 # python
 backend/venv
 backend/.idea
 backend/__pycache__
-backend/tasks_request_handlers/__pycache__
-backend/distributions/__pycache__
-backend/patterns/__pycache__
+backend/server/__pycache__
+backend/server/tasks_request_handlers/__pycache__
+backend/server/distributions/__pycache__
+backend/server/patterns/__pycache__
 # dependencies
 cloud-ml/node_modules
 /.pnp

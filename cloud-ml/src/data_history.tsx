@@ -1,4 +1,4 @@
-import OperationHistory from './operationHistory';
+import OperationHistory from './models/operationHistory';
 
 let operationsHistory: OperationHistory[] = [
     {'id':1, 'operation_name': 'Построение регрессии','input_file_name':'input.csv','output_file_name':'output.png','input_file_id': 1, 'output_file_id': 2},
