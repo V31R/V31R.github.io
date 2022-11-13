@@ -18,3 +18,24 @@ class Task(Base):
 
 task_table = Task.__table__
 
+
+class User(Base):
+    __tablename__ = "users"
+    id = sa.Column(sa.Integer, primary_key=True)
+    login = sa.Column(sa.String(255))
+    password = sa.Column(sa.String(255))
+
+user_table = User.__table__
+
+
+class Operation(Base):
+    __tablename__ = "operation"
+    id = sa.Column(sa.Integer, primary_key=True)
+    user_id = sa.Column(sa.Integer, sa.ForeignKey(user_table.c.id))
+    task_id = sa.Column(sa.Integer, sa.ForeignKey(task_table.c.id))
+    input = sa.Column(sa.String(255))
+    input_name = sa.Column(sa.String(255))
+    result = sa.Column(sa.String(255))
+    result_name = sa.Column(sa.String(255))
+
+operation_table = Operation.__table__

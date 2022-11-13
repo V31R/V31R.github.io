@@ -17,12 +17,12 @@ class HandleDistribution(HandlesTemplate):
     def __init__(self):
         super().__init__('distribution')
 
-    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> web.Response:
+    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> tuple:
         df: pd.DataFrame = get_only_numeric_columns(self.df)
         column_name = request.rel_url.query.get('column_name')
         if column_name and column_name != '':
             if column_name not in df.columns:
-                return web.Response(status=400, text=f"'{column_name}' не входит в числовые столбцы")
+                return web.Response(status=400, text=f"'{column_name}' не входит в числовые столбцы"), None, None
             df = df[column_name]
         elif len(df.columns) > 1:
             logging.getLogger('aiohttp.server').info(f'Got {df.columns} choose first from them')
@@ -38,12 +38,13 @@ class HandleDistribution(HandlesTemplate):
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
         sbn.histplot(to_draw,kde=True, ax=ax)
 
-        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
+        image_name = f"{field.name[:field.name.find('.csv')]}.png"
+        img_inner = save_figure_image(self.base_name, self.user, fig)
 
         response: dict = dict()
-        response['image_name'] = image_name
+        response['image_name'] = img_inner
         response['name'] = df.name
         response['distribution_type'] = best_distribution.get_name()
 
-        return web.json_response(text=json.dumps(response))
+        return web.json_response(text=json.dumps(response)), img_inner, image_name
 

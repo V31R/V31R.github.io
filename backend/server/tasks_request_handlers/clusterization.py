@@ -27,10 +27,10 @@ class HandleClusterization(HandlesTemplate):
             self.is_draw_clusters_centers = request.rel_url.query.get('clusters_centers').lower() in ['true']
         return True, None
 
-    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> web.Response:
+    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> tuple:
         df: pd.DataFrame = get_only_numeric_columns(self.df)
         if len(df.columns) <= 1:
-            return web.Response(status=415, text=f"Недостаточно переменных для кластеризации")
+            return web.Response(status=415, text=f"Недостаточно переменных для кластеризации"), None, None
         clusters = KMeans(n_clusters=self.clusters_num, init='random', n_init=10, max_iter=10)
         clusters.fit_predict(df)
         corr_matrix = await get_corr_matrix(df)
@@ -54,12 +54,13 @@ class HandleClusterization(HandlesTemplate):
             sbn.scatterplot(x=headers[header_max], y=headers[i_max], hue='clusters', ax=ax, marker="X", s=150,
                             palette=palette, data=centers_df, legend=False)
 
-        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
+        image_name = f"{field.name[:field.name.find('.csv')]}.png"
+        img_inner = save_figure_image(self.base_name, self.user, fig)
 
         response: dict = dict()
-        response['image_name'] = image_name
+        response['image_name'] = img_inner
         response['clusters_centers'] = clusters.cluster_centers_.tolist()
         response['clusters_labels'] = clusters.labels_.tolist()
         response['columns_names'] = [n for n in headers]
-        return web.json_response(text=json.dumps(response))
+        return web.json_response(text=json.dumps(response)), img_inner, image_name
 

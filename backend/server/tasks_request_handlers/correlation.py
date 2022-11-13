@@ -36,17 +36,19 @@ class HandleCorrelation(HandlesTemplate):
             self.colormap = request.rel_url.query.get('colormap')
         return True, None
 
-    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> web.Response:
+
+    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> tuple:
         corr_matrix: pd.DataFrame = await get_corr_matrix(self.df)
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 10))
         sbn.heatmap(corr_matrix, annot=True, axes=ax, cmap=self.colormap)
-        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
+        image_name = f"{field.name[:field.name.find('.csv')]}.png"
+        img_inner = save_figure_image(self.base_name, self.user, fig)
         response: dict = dict()
-        response['image_name'] = image_name
+        response['image_name'] = img_inner
         response['names'] = [_ for _ in corr_matrix.columns]
         response['values'] = []
         for i in range(0, len(corr_matrix)):
             for n in response['names']:
                 response['values'].append(corr_matrix[n][i])
-        return web.json_response(text=json.dumps(response))
+        return web.json_response(text=json.dumps(response)), img_inner, image_name
 

@@ -21,7 +21,7 @@ function DataPreprocessing() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        const result: Blob | null = await postPreprocessing(formData, localStorage.getItem('user'));
+        const result: Blob | null = await postPreprocessing(formData, sessionStorage.getItem('user'));
         
         if(result !== null){
             let data: Blob = new Blob([result], {

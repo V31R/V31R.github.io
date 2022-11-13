@@ -22,7 +22,7 @@ function Login() {
             return;
         }
         console.log(user);
-        localStorage.setItem('user', user.token);
+        sessionStorage.setItem('user', user.token);
         navigate('/profile')
         auth_context!.setAuthenticated(true);
 

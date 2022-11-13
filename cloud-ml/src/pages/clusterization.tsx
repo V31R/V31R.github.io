@@ -9,7 +9,7 @@ import NumberInput from '../components/numberInput';
 import InputData from '../models/inputData';
 import StringOutput from '../components/stringOutput';
 import OutputData from '../models/outputData';
-import { getImage } from '../apis/imageApi';
+import { getImage } from '../apis/fileApi';
 import { postClusterization } from '../apis/taskApi';
 
 interface ClusterizationData{
@@ -37,7 +37,7 @@ function Clusterization() {
         }
 
         const get_image = async () => {
-            const image = await getImage(clusterizationData!.image_name, localStorage.getItem('user'));
+            const image = await getImage(clusterizationData!.image_name, sessionStorage.getItem('user'));
             setImage(image)
         }
         get_image()
@@ -58,7 +58,7 @@ function Clusterization() {
 
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
-        const result: ClusterizationData | null = await postClusterization(formData, localStorage.getItem('user'), clustersNumber, withCenters);
+        const result: ClusterizationData | null = await postClusterization(formData, sessionStorage.getItem('user'), clustersNumber, withCenters);
         
         if(result !== null){
             setClusterizationData((oldData: Object) => ({ ...oldData, ...result }))

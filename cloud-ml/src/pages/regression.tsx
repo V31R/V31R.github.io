@@ -3,7 +3,7 @@ import '../css/operationTemplateComponent.css';
 import '../css/regression.css';
 import MethodPanel from '../components/methodPanel';
 import Header from "../components/header";
-import { getImage } from '../apis/imageApi';
+import { getImage } from '../apis/fileApi';
 import ImagePlace from '../components/imagePlace';
 import InputData from '../models/inputData';
 import OutputData from '../models/outputData';
@@ -30,7 +30,7 @@ function Regression() {
             return;
         }
         const get_image = async () => {
-            const image = await getImage(regerssionData!.image_name, localStorage.getItem('user'));
+            const image = await getImage(regerssionData!.image_name, sessionStorage.getItem('user'));
             setImage(image)
         }
         get_image()
@@ -51,7 +51,7 @@ function Regression() {
 
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
-        const result: RegressionData | null = await postRegression(formData, localStorage.getItem('user'), polynomialOrder, columnNameX, columnNameY);
+        const result: RegressionData | null = await postRegression(formData, sessionStorage.getItem('user'), polynomialOrder, columnNameX, columnNameY);
 
         if (result !== null) {
             setRegressionData((oldData: Object) => ({ ...oldData, ...result }))

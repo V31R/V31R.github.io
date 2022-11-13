@@ -7,7 +7,7 @@ import ImagePlace from '../components/imagePlace';
 import Matrix from '../components/matrix';
 import StringInput from '../components/stringInput';
 import InputData from '../models/inputData';
-import { getImage } from '../apis/imageApi';
+import { getImage } from '../apis/fileApi';
 import { postCorrelation } from '../apis/taskApi';
 
 interface CorrelationData {
@@ -26,7 +26,7 @@ function Correlation() {
                 return;
         }
         const get_image = async () => {
-            const image = await getImage(correlationData!.image_name, localStorage.getItem('user'));
+            const image = await getImage(correlationData!.image_name, sessionStorage.getItem('user'));
             setImage(image)
         }
         get_image()
@@ -44,7 +44,7 @@ function Correlation() {
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
 
-        const result: CorrelationData | null = await postCorrelation(formData, localStorage.getItem('user'), colorMap);
+        const result: CorrelationData | null = await postCorrelation(formData, sessionStorage.getItem('user'), colorMap);
         
         if(result !== null){
             setCorrelationData((oldData: Object) => ({ ...oldData, ...result }))

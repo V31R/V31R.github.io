@@ -2,7 +2,7 @@ import logging
 from sqlalchemy.sql import select
 import sqlalchemy as sa
 
-from models import task_table, engine, Base
+from models import  engine, Base, task_table, user_table, operation_table
 from tasks_request_handlers import tasks_dict
 
 def fill_tasks():
@@ -13,14 +13,10 @@ def fill_tasks():
     )
 
 def create_task_table():
-    if not sa.inspect(engine).has_table('task'):
-        logging.getLogger('database').info("Create table 'task'")
+    if not sa.inspect(engine).has_table(task_table.name):
+        logging.getLogger('database').info(f"Create table '{task_table.name}'")
         Base.metadata.create_all(bind=engine, tables=[task_table])
         fill_tasks()
-        with engine.connect() as connection:
-            s = select(task_table)
-            result = connection.execute(s)
-            logging.getLogger('database').info(result)
     else:
         with engine.connect() as connection:
             s = select(task_table)
@@ -29,7 +25,19 @@ def create_task_table():
             if items_number != len(tasks_dict):
                 fill_tasks()
 
+def create_user_table():
+    if not sa.inspect(engine).has_table(user_table.name):
+        logging.getLogger('database').info(f"Create table '{user_table.name}'")
+        Base.metadata.create_all(bind=engine, tables=[user_table])
+
+
+def create_operation_table():
+    if not sa.inspect(engine).has_table(operation_table.name):
+        logging.getLogger('database').info(f"Create table '{operation_table.name}'")
+        Base.metadata.create_all(bind=engine, tables=[operation_table])
 
 def init_db():
     create_task_table()
+    create_user_table()
+    create_operation_table()
     logging.getLogger('database').info(f"Inited tables {[n for n in Base.metadata.sorted_tables]}")

@@ -3,7 +3,7 @@ import '../css/operationTemplateComponent.css';
 import '../css/distribution.css';
 import MethodPanel from '../components/methodPanel';
 import Header from "../components/header";
-import { getImage } from '../apis/imageApi';
+import { getImage } from '../apis/fileApi';
 import ImagePlace from '../components/imagePlace';
 import { postDistribution } from '../apis/taskApi';
 import InputData from '../models/inputData';
@@ -27,7 +27,7 @@ function Distribution() {
             return;
         }
         const get_image = async () => {
-            const image = await getImage(distributionData!.image_name, localStorage.getItem('user'));
+            const image = await getImage(distributionData!.image_name, sessionStorage.getItem('user'));
             setImage(image)
         }
         get_image()
@@ -43,7 +43,7 @@ function Distribution() {
 
         const formData = new FormData();
         formData.append(`${selectedFile.name}`, selectedFile);
-        const result: DistributionData | null = await postDistribution(formData, localStorage.getItem('user'), columnName);
+        const result: DistributionData | null = await postDistribution(formData, sessionStorage.getItem('user'), columnName);
 
         if (result !== null) {
             setDistributionData((oldData: Object) => ({ ...oldData, ...result }))

@@ -33,17 +33,17 @@ class HandleRegression(HandlesTemplate):
             self.column_y = request.rel_url.query.get('column_y')
         return True, None
 
-    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> web.Response:
+    async def work_with_df(self, request: web.Request, field: BodyPartReader) -> tuple:
         df: pd.DataFrame = get_only_numeric_columns(self.df)
 
         if len(df.columns) <= 1:
-            return web.Response(status=415, text=f"Недостаточно переменных для регресии")
+            return web.Response(status=415, text=f"Недостаточно переменных для регресии"), None, None
 
         if self.column_x != '' and self.column_x not in df.columns:
-            return web.Response(status=415, text=f"Столбец '{self.column_x}' не является числовым")
+            return web.Response(status=415, text=f"Столбец '{self.column_x}' не является числовым"), None, None
 
         if self.column_y != '' and self.column_y not in df.columns:
-            return web.Response(status=415, text=f"Столбец '{self.column_y}' не является числовым")
+            return web.Response(status=415, text=f"Столбец '{self.column_y}' не является числовым"), None, None
 
         column_name_x: str = ''
         column_name_y: str = ''
@@ -93,11 +93,12 @@ class HandleRegression(HandlesTemplate):
         sbn.regplot(x=column_name_x, y=column_name_y, data=df, ax=ax, order=self.order, truncate=True,
                     line_kws={"color": "#8f39eb"}, scatter_kws={'color':'#a766ed'})
 
-        image_name: str = save_figure_image(self.task_name, field.name, self.user, fig)
+        image_name = f"{field.name[:field.name.find('.csv')]}.png"
+        img_inner = save_figure_image(self.base_name, self.user, fig)
 
         response: dict = dict()
-        response['image_name'] = image_name
+        response['image_name'] = img_inner
         response['name_x'] = column_name_x
         response['name_y'] = column_name_y
-        return web.json_response(text=json.dumps(response))
+        return web.json_response(text=json.dumps(response)), img_inner, image_name
 

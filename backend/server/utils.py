@@ -2,6 +2,8 @@ import logging
 import pandas as pd
 import numpy as np
 from datetime import datetime
+
+from aiohttp import web
 from chardet.universaldetector import UniversalDetector
 import os
 import csv
@@ -10,9 +12,11 @@ from auth import anonymous_user
 
 csv_dir = "csv"
 temp_csv_dir = "temp_csv"
-
 csv_base_path = f"{os.environ.get('BASE_PATH')}/{csv_dir}/"
 temp_csv_base_path = f"{os.environ.get('BASE_PATH')}/{temp_csv_dir}/"
+csv_prefix = '1'
+input_prefix = '0'
+result_prefix = '1'
 
 async def find_delimiter(path) -> str:
     sniffer = csv.Sniffer()
@@ -20,8 +24,29 @@ async def find_delimiter(path) -> str:
         delimiter = sniffer.sniff(fp.read(5000)).delimiter
     return delimiter
 
+def get_csv_file(filename: str, user: str) -> web.Response:
+    path = temp_csv_base_path
+    if user != anonymous_user:
+        path = csv_base_path
+    logging.getLogger('aiohttp.server').info(f'Find {filename}')
+    if not (filename in os.listdir(path)):
+        return web.Response(status=400)
+    file = open(path + filename, encoding='utf-8')
+    return web.Response(body=file.read())
 
+def save_df_result(df: pd.DataFrame, filename, user: str):
+    filename = csv_prefix + result_prefix + filename
+    path = temp_csv_base_path
+    if user != anonymous_user:
+        path = csv_base_path
+    df.to_csv(path + filename, index=False, encoding='utf-8')
+    return filename
+
+'''
+Возвращает кортеж с pandas.DataFrame и сохранённым именем файла
+'''
 async def get_df_from_io(input_data: bytearray, filename: str, user: str) -> tuple:
+    filename = csv_prefix + input_prefix + filename
     logging.getLogger('aiohttp.server').info(f'Analyze {filename} encoding')
     temp_filename = datetime.now().strftime("%Y%m%d%H%M%S") + filename
     path = temp_csv_base_path
