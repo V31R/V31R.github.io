@@ -1,6 +1,16 @@
 version: "3"
 
 services:
+  web:
+    build: ./nginx
+    container_name: web-nginx
+    depends_on:
+      - aiohttp_cloud_ml_server
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - "8080:80"
+
   aiohttp_cloud_ml_server:
     build: ./server
     container_name: aiohttp_cloud_ml_server
@@ -12,7 +22,7 @@ services:
     volumes:
       - data:/data
     ports:
-      - "8080:5000"
+      - "8081:5000"
 
   postgres_db:
     build: ./database

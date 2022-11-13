@@ -31,10 +31,9 @@ def __check_user__(user: User):
 async def get_authentication_handle(request):
     login = request.rel_url.query.get('login', 'error')
     password = request.rel_url.query.get('password', 'error')
-    logging.getLogger('aiohttp.server').debug(f"{login} {password}")
+
     if login == 'error' or password == 'error':
         return web.Response(status=400, text='Не указан логин или пароль')
-
     user = __check_user__(create_user(login, password))
     if user == None:
         return web.Response(status=400, text='Неверно указан логин или пароль!')
@@ -45,7 +44,7 @@ async def get_authentication_handle(request):
 async def post_registration_handle(request):
     login = request.rel_url.query.get('login', 'error')
     password = request.rel_url.query.get('password', 'error')
-    logging.getLogger('aiohttp.server').debug(f"{login} {password}")
+
     if login == 'error' or password == 'error':
         return web.Response(status=400, text='Не указан логин или пароль')
 

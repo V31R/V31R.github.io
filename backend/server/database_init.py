@@ -2,7 +2,7 @@ import logging
 from sqlalchemy.sql import select
 import sqlalchemy as sa
 
-from models import  engine, Base, task_table, user_table, operation_table
+from models import engine, Base, task_table, user_table, operation_table, dsn
 from tasks_request_handlers import tasks_dict
 
 def fill_tasks():
