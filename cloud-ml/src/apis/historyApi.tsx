@@ -6,7 +6,7 @@ const historyPath: string = 'http://localhost:8080/history';
 export async function getHistory(user: string | null) {
     return Axios.get(historyPath,
         {
-            params: {user:user},
+            headers: { 'Authorization': ''+user},
             responseType: "json"
         }
     ).then

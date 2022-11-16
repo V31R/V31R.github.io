@@ -28,12 +28,18 @@ def __check_user__(user: User):
     logging.getLogger('aiohttp.server').debug(f"{result}")
     return result[0]
 
+def __get_user_from_basic_auth__(request: web.Request):
+    auth: BasicAuth = BasicAuth.decode(request.headers.get('Authorization'))
+    return create_user(auth.login, auth.password)
+
+def get_user_from_auth(request: web.Request):
+    user = request.headers.get('Authorization')
+    return check_user(user)
+
 async def get_authentication_handle(request: web.Request) -> web.Response:
     if request.headers.get('Authorization') is None:
         return web.Response(status=400)
-    auth: BasicAuth = BasicAuth.decode(request.headers.get('Authorization'))
-
-    user = __check_user__(create_user(auth.login, auth.password))
+    user = __check_user__(__get_user_from_basic_auth__(request))
     if user == None:
         return web.Response(status=400, text='Неверно указан логин или пароль!')
     response: dict = dict()
@@ -45,8 +51,7 @@ async def post_registration_handle(request: web.Request) -> web.Response:
     if request.headers.get('Authorization') is None:
         return web.Response(status=400)
 
-    auth: BasicAuth = BasicAuth.decode(request.headers.get('Authorization'))
-    user = create_user(auth.login, auth.password)
+    user = __get_user_from_basic_auth__(request)
 
     if __check_unique_user__(user):
         id = add_user(user)

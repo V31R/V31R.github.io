@@ -17,7 +17,6 @@ app.add_routes([
     web.post('/preprocessing', post_preprocessing_handler),
     web.post('/clusterization', post_clusterization_handler),
     web.post('/correlation', post_correlation_handler),
-    web.get('/images/{image_name}', get_image_handle),
     web.get('/files/{filename}', get_file_handler),
     web.get('/history', get_history_handler),
     web.get('/authentication', get_authentication_handle),

@@ -11,7 +11,7 @@ export async function getFile(filename: string, user: string | null) {
 
     return Axios.get(`${fileBasePath}/${filename}`,
         {
-            params: { user: user },
+            headers: { 'Authorization': ''+user},
             responseType: 'blob'
         }
     ).then

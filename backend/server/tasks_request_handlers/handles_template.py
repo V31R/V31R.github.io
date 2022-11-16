@@ -6,8 +6,7 @@ from sqlalchemy.sql import select
 
 from utils import get_df_from_io
 
-from auth import anonymous_user
-from auth import check_user
+from auth import get_user_from_auth, anonymous_user
 
 from models import task_table, Operation
 from database_api import select_from_table, create_operation, get_operation_number, add_operation
@@ -35,7 +34,10 @@ class HandlesTemplate:
         if request.headers.get('Content-type').find("multipart") == -1:
             return web.Response(status=400, text='Недопустимый Content-type')
 
-        self.user = check_user(request.rel_url.query.get('user', anonymous_user))
+        self.user = get_user_from_auth(request)
+        if self.user is None:
+            self.user = anonymous_user
+
         is_checked, response = await self.check_parameters(request)
 
         if not is_checked:

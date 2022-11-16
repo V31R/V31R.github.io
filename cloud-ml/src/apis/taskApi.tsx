@@ -10,8 +10,11 @@ function postToTask(path: string, formData: FormData, user: string | null, param
     return Axios.post(path,
         formData,
         {
-            params: { ...{ user: user }, ...parameters },
-            headers: { "Content-Type": "multipart/form-data" },
+            params: { ...parameters },
+            headers: { 
+                "Content-Type": "multipart/form-data",
+                'Authorization': ''+user
+            },
             responseType: "json"
         }
     ).then
@@ -57,8 +60,10 @@ export function postPreprocessing(formData: FormData, user: string | null) {
     return Axios.post(preprocessingPath,
         formData,
         {
-            params: { user: user },
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: { 
+                "Content-Type": "multipart/form-data",
+                'Authorization': ''+user
+            },
             responseType: "blob"
         }
     ).then
