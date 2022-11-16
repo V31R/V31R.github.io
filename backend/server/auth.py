@@ -1,7 +1,7 @@
 import json
 import logging
 from aiohttp import web
-
+from aiohttp import BasicAuth
 from database_api import find_user_by_login, create_user, add_user
 from models import User
 
@@ -28,27 +28,26 @@ def __check_user__(user: User):
     logging.getLogger('aiohttp.server').debug(f"{result}")
     return result[0]
 
-async def get_authentication_handle(request):
-    login = request.rel_url.query.get('login', 'error')
-    password = request.rel_url.query.get('password', 'error')
+async def get_authentication_handle(request: web.Request) -> web.Response:
+    if request.headers.get('Authorization') is None:
+        return web.Response(status=400)
+    auth: BasicAuth = BasicAuth.decode(request.headers.get('Authorization'))
 
-    if login == 'error' or password == 'error':
-        return web.Response(status=400, text='Не указан логин или пароль')
-    user = __check_user__(create_user(login, password))
+    user = __check_user__(create_user(auth.login, auth.password))
     if user == None:
         return web.Response(status=400, text='Неверно указан логин или пароль!')
     response: dict = dict()
     response['token'] = user
     return web.json_response(text=json.dumps(response))
 
-async def post_registration_handle(request):
-    login = request.rel_url.query.get('login', 'error')
-    password = request.rel_url.query.get('password', 'error')
 
-    if login == 'error' or password == 'error':
-        return web.Response(status=400, text='Не указан логин или пароль')
+async def post_registration_handle(request: web.Request) -> web.Response:
+    if request.headers.get('Authorization') is None:
+        return web.Response(status=400)
 
-    user = create_user(login, password)
+    auth: BasicAuth = BasicAuth.decode(request.headers.get('Authorization'))
+    user = create_user(auth.login, auth.password)
+
     if __check_unique_user__(user):
         id = add_user(user)
     else:
