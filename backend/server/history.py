@@ -15,7 +15,10 @@ def operation_to_dict(operation:tuple, number: int):
     return result
 
 async def get_history_handler(request: web.Request) -> web.Response:
-    user = get_user_from_auth(request)
+    try:
+        user = get_user_from_auth(request)
+    except Exception as e:
+        return web.Response(status=401)
     if user == anonymous_user or user is None:
         return web.Response(status=401)
 

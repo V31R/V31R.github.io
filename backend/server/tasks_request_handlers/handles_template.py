@@ -33,8 +33,11 @@ class HandlesTemplate:
 
         if request.headers.get('Content-type').find("multipart") == -1:
             return web.Response(status=400, text='Недопустимый Content-type')
+        try:
+            self.user = get_user_from_auth(request)
+        except Exception:
+            return web.Response(status=401)
 
-        self.user = get_user_from_auth(request)
         if self.user is None:
             self.user = anonymous_user
 
