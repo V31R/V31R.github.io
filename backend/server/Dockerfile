@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.9
 
 WORKDIR /
 RUN /usr/local/bin/python -m pip install --upgrade pip

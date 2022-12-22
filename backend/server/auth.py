@@ -15,7 +15,9 @@ def check_user(user: str) ->str:
     return user
 
 def __check_unique_user__(user: User):
+    print(user.login, user.password)
     result = find_user_by_login(user.login)
+    print(result)
     if len(result) > 0:
         return False
     return True
@@ -69,10 +71,10 @@ def get_user_from_auth(request: web.Request):
 async def get_authentication_handle(request: web.Request) -> web.Response:
     if request.headers.get('Authorization') is None:
         return web.Response(status=400)
-    user = __check_user__(__get_user_from_basic_auth__(request))
+    user: User = __check_user__(__get_user_from_basic_auth__(request))
     if user == None:
         return web.Response(status=400, text='Неверно указан логин или пароль!')
-    t, r_t = __create__tokens__(user[1])
+    t, r_t = __create__tokens__(user.login)
     response: dict = dict()
     response['token'] = t
     response['refresh_token'] = r_t
@@ -83,13 +85,13 @@ async def post_registration_handle(request: web.Request) -> web.Response:
     if request.headers.get('Authorization') is None:
         return web.Response(status=400)
 
-    user = __get_user_from_basic_auth__(request)
+    user: User = __get_user_from_basic_auth__(request)
 
     if __check_unique_user__(user):
-        id = add_user(user)
+        add_user(user)
     else:
         return web.Response(status=409, text='Такой пользователь уже существует!')
-    t, r_t = __create__tokens__(user[1])
+    t, r_t = __create__tokens__(user.login)
     response: dict = dict()
     response['token'] = t
     response['refresh_token'] = r_t

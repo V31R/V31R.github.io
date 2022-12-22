@@ -1,15 +1,16 @@
 version: "3"
 
 services:
-  web:
-    build: ./nginx
-    container_name: web-nginx
-    depends_on:
-      - aiohttp_cloud_ml_server
+  postgres_db:
+    build: ./database
+    container_name: postgres_db
+    restart: always
+    env_file:
+      - .env
     volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - postgres_data:/var/lib/postgresql/data/
     ports:
-      - "8080:80"
+      - "5432:5432"
 
   aiohttp_cloud_ml_server:
     build: ./server
@@ -24,16 +25,15 @@ services:
     ports:
       - "8081:5000"
 
-  postgres_db:
-    build: ./database
-    container_name: postgres_database
-    restart: always
-    env_file:
-      - .env
+  web:
+    build: ./nginx
+    container_name: web-nginx
+    depends_on:
+      - aiohttp_cloud_ml_server
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
     ports:
-      - "5432:5432"
+      - "8080:80"
 
 volumes:
   data:
